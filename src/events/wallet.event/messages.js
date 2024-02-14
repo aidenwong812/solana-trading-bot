@@ -1,10 +1,10 @@
 const { trim } = require('@/utils');
 
 const walletMsg = ({ address, balance }) => `
-  <b>Your Wallet</b>:
+  <b>💳 Your Wallet</b>:
     
   <b>  </b>Address: <code>${address}</code>
-  <b>  </b>Balance: <b>${balance.toFixed(9)}</b> SOL
+  <b>  </b>⚖️ Balance: <b>${balance.toFixed(9)}</b> SOL
   
   <b>  </b>Tap to copy the address and send SOL to deposit.
 `;
