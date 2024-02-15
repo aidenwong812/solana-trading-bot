@@ -48,6 +48,8 @@ const positionsMsg = ({ tokenAccounts, walletBalance }) => {
       balanceUsd,
       balanceSol,
       mcap,
+      liquidity,
+      pooledSol,
       priceUsd,
       priceChange,
       profitPercent,
@@ -58,8 +60,10 @@ const positionsMsg = ({ tokenAccounts, walletBalance }) => {
       /${index + 1} <a href="https://birdeye.so/token/${mint}?chain=solana">${symbol}</a>
       💥 Value: <b>$${roundPrice(balanceUsd)}</b> / <b>${roundPrice(balanceSol)} SOL</b>
       🚀 Profit: <b>${roundPrice(profitPercent)}%</b> / <b>${roundPrice(profitSol)} SOL</b>
-      💡 Mcap: <b>$${convertToShort(mcap)}</b> @ <b>$${roundPrice(priceUsd)}</b>
       5m: <b>${formatNumber(priceChange.m5)}%</b>, 1h: <b>${formatNumber(priceChange.h1)}%</b>, 6h: <b>${formatNumber(priceChange.h6)}%</b>, 24h: <b>${formatNumber(priceChange.h24)}%</b>
+      💡 Market cap: <b>$${convertToShort(mcap)}</b> @ <b>$${roundPrice(priceUsd)}</b>
+      💧 Liquidity: <b>$${convertToShort(liquidity)}</b>
+      ⛽ Pooled SOL: <b>${pooledSol.toFixed(2)} SOL</b>
     `;
   });
 

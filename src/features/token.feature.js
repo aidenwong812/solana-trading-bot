@@ -45,6 +45,8 @@ const getTokenAccountsByOwner = async (ownerAddress) => {
     const priceUsd = pair ? parseFloat(pair.priceUsd) : NaN;
     const priceNative = pair ? parseFloat(pair.priceNative) : NaN;
     const priceChange = pair ? pair.priceChange : priceChangeNaN;
+    const liquidity = pair ? pair.liquidity.usd / 2 : NaN;
+    const pooledSol = pair ? pair.liquidity.quote : NaN;
 
     res.push({
       mint: mintAddress,
@@ -58,6 +60,8 @@ const getTokenAccountsByOwner = async (ownerAddress) => {
       priceNative,
       priceChange,
       mcap: priceUsd * supply.uiAmount,
+      liquidity,
+      pooledSol,
     });
   }
 
@@ -99,6 +103,8 @@ const getTokenAccountByIndex = async (ownerAddress, index) => {
   const priceUsd = pair ? parseFloat(pair.priceUsd) : NaN;
   const priceNative = pair ? parseFloat(pair.priceNative) : NaN;
   const priceChange = pair ? pair.priceChange : priceChangeNaN;
+  const liquidity = pair ? pair.liquidity.usd / 2 : NaN;
+  const pooledSol = pair ? pair.liquidity.quote : NaN;
 
   return {
     mint: mintAddress,
@@ -113,6 +119,8 @@ const getTokenAccountByIndex = async (ownerAddress, index) => {
     priceNative,
     priceChange,
     mcap: priceUsd * supply.uiAmount,
+    liquidity,
+    pooledSol,
   };
 };
 
@@ -147,6 +155,8 @@ const getTokenAccountByMint = async (
   const priceUsd = pair ? parseFloat(pair.priceUsd) : NaN;
   const priceNative = pair ? parseFloat(pair.priceNative) : NaN;
   const priceChange = pair ? pair.priceChange : priceChangeNaN;
+  const liquidity = pair ? pair.liquidity.usd / 2 : NaN;
+  const pooledSol = pair ? pair.liquidity.quote : NaN;
 
   const getIndex = async (ownerAddress, mintAddress) => {
     const tokenAccounts = await apiClientAlchemy.getTokenAccountsByOwner(
@@ -180,6 +190,8 @@ const getTokenAccountByMint = async (
     priceNative,
     priceChange,
     mcap: priceUsd * supply.uiAmount,
+    liquidity,
+    pooledSol,
     index,
   };
 };

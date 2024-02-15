@@ -13,6 +13,8 @@ const tokenMsg = ({
   priceUsd,
   priceChange,
   mcap,
+  liquidity,
+  pooledSol,
   walletBalance,
 }) => {
   return `
@@ -27,6 +29,8 @@ const tokenMsg = ({
     priceChange.h24
   )}%</b>
     💡 Market Cap: <b>$${convertToShort(mcap)}</b>
+    💧 Liquidity: <b>$${convertToShort(liquidity)}</b>
+    ⛽ Pooled SOL: <b>${pooledSol.toFixed(2)} SOL</b>
 
     💳 Wallet Balance: <b>${walletBalance.toFixed(4)} SOL</b>
     To buy press one of the buttons below.

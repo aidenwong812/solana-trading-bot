@@ -70,7 +70,8 @@ const getSwapTransaction = async ({ quoteResponse, payer }) => {
     },
     body: JSON.stringify({
       quoteResponse,
-      userPublicKey: payer.publicKey,
+      userPublicKey: payer.publicKey.toString(),
+      wrapAndUnwrapSol: true
     }),
   };
 

@@ -134,6 +134,7 @@ const showToken = async (bot, msg, params) => {
 showToken.getMessage = async ({ walletAddress, mintAddress, settings }) => {
   let metadata, walletBalance;
   let priceUsd, priceChange;
+  let liquidity, pooledSol;
 
   try {
     metadata = await getTokenMetadata(mintAddress);
@@ -159,6 +160,8 @@ showToken.getMessage = async ({ walletAddress, mintAddress, settings }) => {
     const pair = await getPair(mintAddress);
     priceUsd = parseFloat(pair.priceUsd);
     priceChange = pair.priceChange;
+    liquidity = pair.liquidity.usd / 2;
+    pooledSol = pair.liquidity.quote
   } catch (e) {
     console.error(e);
     return {
@@ -182,6 +185,8 @@ showToken.getMessage = async ({ walletAddress, mintAddress, settings }) => {
       mcap:
         (priceUsd * metadata.mint.supply.basisPoints.toString()) /
         10 ** metadata.mint.decimals,
+      liquidity,
+      pooledSol,
       walletBalance,
     }),
     keyboard: tokenKeyboard({ mintAddress, settings }),
