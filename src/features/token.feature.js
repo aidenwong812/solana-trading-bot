@@ -136,11 +136,11 @@ const getTokenAccountByMint = async (
   try {
     const balance = await apiClientAlchemy.getTokenAccountBalance(ata);
     decimals = balance.result.value.decimals;
-    tokenAmount = balance.result.value.uiAmount + tradeAmount / (10 ^ decimals);
+    tokenAmount = balance.result.value.uiAmount + tradeAmount / (10 ** decimals);
   } catch {
     const metadata = await apiClientMetaplex.getTokenMetadata(mintAddress);
     decimals = metadata.mint.decimals;
-    tokenAmount = tradeAmount / (10 ^ decimals);
+    tokenAmount = tradeAmount / (10 ** decimals);
   }
 
   let pair, metadata;

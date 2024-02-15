@@ -27,6 +27,7 @@ const getTradesData = async (userId, mintAddress) => {
       quoteAmount += trade.outAmount;
     }
     if (trade.inputMint === mintAddress) {
+      initial -= trade.outAmount;
       quoteAmount -= trade.inAmount;
       baseAmount -= trade.outAmount;
     }
