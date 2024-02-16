@@ -9,8 +9,11 @@ const {
   replyMinPosValueMsg,
   minPosValueMsg,
   autoBuyMsg,
+  autoSellMsg,
   replyAutoBuyAmountMsg,
+  replyAutoSellAmountMsg,
   autoBuyAmountMsg,
+  autoSellAmountMsg,
   replyLeftBuyAmountMsg,
   leftBuyAmountMsg,
   replyRightBuyAmountMsg,
@@ -23,6 +26,8 @@ const {
   buySlippageMsg,
   replySellSlippageMsg,
   sellSlippageMsg,
+  replyGasFeeMsg,
+  gasFeeMsg,
   invalidNumberMsg,
   numberLimitMsg,
 } = require('./messages');
@@ -48,7 +53,7 @@ const showSettings = async (bot, msg) => {
 const toggleSetting = async (bot, msg, params) => {
   const chatId = msg.chat.id;
   const { name, value } = params;
-  const settings = await updateSettings(chatId, { [name]: value });
+  const settings = await updateSettings(chatId, { [name]: name === 'gasFee' ? value / 10000 : value });
 
   bot
     .editMessageText(settingsMsg(), {
@@ -67,9 +72,15 @@ const toggleSetting = async (bot, msg, params) => {
         case 'autoBuy':
           bot.sendMessage(chatId, autoBuyMsg(settings.autoBuy));
           break;
+        case 'autoSell':
+          bot.sendMessage(chatId, autoSellMsg(settings.autoSell));
+          break;
+        case 'gasFee':
+          bot.sendMessage(chatId, gasFeeMsg(settings.gasFee));
+          break;
       }
     })
-    .catch(() => {});
+    .catch(() => { });
 };
 
 const editSetting = async (bot, msg, params) => {
@@ -83,6 +94,9 @@ const editSetting = async (bot, msg, params) => {
       break;
     case 'autoBuyAmount':
       message = replyAutoBuyAmountMsg();
+      break;
+    case 'autoSellAmount':
+      message = replyAutoSellAmountMsg();
       break;
     case 'leftBuyAmount':
       message = replyLeftBuyAmountMsg();
@@ -101,6 +115,9 @@ const editSetting = async (bot, msg, params) => {
       break;
     case 'sellSlippage':
       message = replySellSlippageMsg();
+      break;
+    case 'gasFee':
+      message = replyGasFeeMsg();
       break;
     default:
       message = '';
@@ -126,7 +143,9 @@ const editSetting = async (bot, msg, params) => {
               return;
             }
           case 'minPosValue':
+          case 'gasFee':
           case 'autoBuyAmount':
+          case 'autoSellAmount':
           case 'leftBuyAmount':
           case 'rightBuyAmount':
             if (isNaN(value)) {
@@ -153,6 +172,9 @@ const editSetting = async (bot, msg, params) => {
           case 'autoBuyAmount':
             bot.sendMessage(chatId, autoBuyAmountMsg(value));
             break;
+          case 'autoSellAmount':
+            bot.sendMessage(chatId, autoSellAmountMsg(value));
+            break;
           case 'leftBuyAmount':
             bot.sendMessage(chatId, leftBuyAmountMsg(value));
             break;
@@ -170,6 +192,9 @@ const editSetting = async (bot, msg, params) => {
             break;
           case 'sellSlippage':
             bot.sendMessage(chatId, sellSlippageMsg(value));
+            break;
+          case 'gasFee':
+            bot.sendMessage(chatId, gasFeeMsg(value));
             break;
           default:
         }

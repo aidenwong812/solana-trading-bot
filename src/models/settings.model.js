@@ -29,6 +29,16 @@ const Settings = sequelize.define(
       allowNull: false,
       defaultValue: 0.1,
     },
+    autoSell: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    autoSellAmount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 50,
+    },
     leftBuyAmount: {
       type: DataTypes.FLOAT,
       allowNull: false,
@@ -58,6 +68,11 @@ const Settings = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 20,
+    },
+    gasFee: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0.0005,
     },
   },
   {

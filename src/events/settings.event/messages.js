@@ -36,12 +36,24 @@ const autoBuyMsg = (value) => `
   Auto Buy ${value ? 'enabled' : 'disabled'}.
 `;
 
+const autoSellMsg = (value) => `
+  Auto Sell ${value ? 'enabled' : 'disabled'}.
+`;
+
 const replyAutoBuyAmountMsg = () => `
   Reply with your new Auto Buy Amount in SOL. Example: 0.5
 `;
 
+const replyAutoSellAmountMsg = () => `
+  Reply with your new Auto Sell Amount in %. Example: 50
+`;
+
 const autoBuyAmountMsg = (value) => `
   Auto Buy Amount set to ${value} SOL.
+`;
+
+const autoSellAmountMsg = (value) => `
+  Auto Sell Amount set to ${value} %.
 `;
 
 const replyLeftBuyAmountMsg = () => `
@@ -92,6 +104,14 @@ const sellSlippageMsg = (value) => `
   Sell Slippage set to ${value}%.
 `;
 
+const replyGasFeeMsg = () => `
+  Reply with your new gas fee setting in SOL. Example: 0.0005
+`;
+
+const gasFeeMsg = (value) => `
+  Gas fee set to ${value} SOL.
+`;
+
 const invalidNumberMsg = () => `
   Invalid number entered. Please try again. Example: 0.5
 `;
@@ -106,8 +126,11 @@ module.exports = {
   replyMinPosValueMsg: () => trim(replyMinPosValueMsg()),
   minPosValueMsg: (params) => trim(minPosValueMsg(params)),
   autoBuyMsg: (params) => trim(autoBuyMsg(params)),
+  autoSellMsg: (params) => trim(autoSellMsg(params)),
   replyAutoBuyAmountMsg: () => trim(replyAutoBuyAmountMsg()),
+  replyAutoSellAmountMsg: () => trim(replyAutoSellAmountMsg()),
   autoBuyAmountMsg: (params) => trim(autoBuyAmountMsg(params)),
+  autoSellAmountMsg: (params) => trim(autoSellAmountMsg(params)),
   replyLeftBuyAmountMsg: () => trim(replyLeftBuyAmountMsg()),
   leftBuyAmountMsg: (params) => trim(leftBuyAmountMsg(params)),
   replyRightBuyAmountMsg: () => trim(replyRightBuyAmountMsg()),
@@ -120,6 +143,8 @@ module.exports = {
   buySlippageMsg: (params) => trim(buySlippageMsg(params)),
   replySellSlippageMsg: () => trim(replySellSlippageMsg()),
   sellSlippageMsg: (params) => trim(sellSlippageMsg(params)),
+  replyGasFeeMsg: () => trim(replyGasFeeMsg()),
+  gasFeeMsg: (params) => trim(gasFeeMsg(params)),
   invalidNumberMsg: () => trim(invalidNumberMsg()),
   numberLimitMsg: () => trim(numberLimitMsg()),
 };

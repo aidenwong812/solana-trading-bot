@@ -3,12 +3,15 @@ const settingsKeyboard = ({
   minPosValue,
   autoBuy,
   autoBuyAmount,
+  autoSell,
+  autoSellAmount,
   leftBuyAmount,
   rightBuyAmount,
   leftSellAmount,
   rightSellAmount,
   buySlippage,
   sellSlippage,
+  gasFee,
 }) => [
   [{ text: '--- GENERAL SETTINGS ---', callback_data: 'none' }],
   [
@@ -19,6 +22,21 @@ const settingsKeyboard = ({
     {
       text: `✎ Min Pos Value: $${minPosValue}`,
       callback_data: 'editSetting minPosValue',
+    },
+  ],
+  [{ text: '--- Set Referrer ---', callback_data: 'none' }],
+  [
+    {
+      text: `${gasFee === 0.0015 ? '✅ ' : ''}Fast 🦄`,
+      callback_data: `toggleSetting gasFee 15`,
+    },
+    {
+      text: `${gasFee === 0.0075 ? '✅ ' : ''}Turbo 🚀`,
+      callback_data: `toggleSetting gasFee 75`,
+    },
+    {
+      text: `${gasFee !== 0.0015 && gasFee !== 0.0075 ? '✅ ' : ''}Custom Fee`,
+      callback_data: `editSetting gasFee`,
     },
   ],
   [
@@ -35,6 +53,22 @@ const settingsKeyboard = ({
     {
       text: `✎ ${autoBuyAmount} SOL`,
       callback_data: 'editSetting autoBuyAmount',
+    },
+  ],
+  [
+    {
+      text: '--- AUTO SELL ---',
+      callback_data: 'none',
+    },
+  ],
+  [
+    {
+      text: `${autoSell ? '🟢 Enabled' : '🔴 Disabled'} `,
+      callback_data: `toggleSetting autoSell ${autoSell ? 0 : 1}`,
+    },
+    {
+      text: `✎ ${autoSellAmount} %`,
+      callback_data: 'editSetting autoSellAmount',
     },
   ],
   [
