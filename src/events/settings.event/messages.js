@@ -4,7 +4,6 @@ const settingsMsg = () => `
   <b>Settings:</b>
     
   <b>GENERAL SETTINGS</b>
-  <b>STRIKEbot Announcements:</b> Occasional announcements. Tap to toggle.
   <b>Minimum Position Value:</b> Minimum position value to show in portfolio. Will hide tokens below this threshhold. Tap to edit.
 
   <b>AUTO BUY</b>
@@ -18,10 +17,6 @@ const settingsMsg = () => `
 
   <b>TRANSACTION PRIORITY</b>
   Increase your Transaction Priority to improve transaction speed. Select preset or tap to edit.
-`;
-
-const accounementsMsg = (announcements) => `
-  STRIKEbot Announcements ${announcements ? 'enabled' : 'disabled'}.
 `;
 
 const replyMinPosValueMsg = () => `
@@ -104,6 +99,22 @@ const sellSlippageMsg = (value) => `
   Sell Slippage set to ${value}%.
 `;
 
+const replyAutoBuySlippageMsg = () => `
+  Reply with your new slippage setting for auto buys in % (0.00 - 50.00%). Example: 5.5
+`;
+
+const autoBuySlippageMsg = (value) => `
+  Auto Buy Slippage set to ${value}%.
+`;
+
+const replyAutoSellSlippageMsg = () => `
+  Reply with your new slippage setting for auto sells in % (0.00 - 50.00%). Example: 5.5
+`;
+
+const autoSellSlippageMsg = (value) => `
+  Auto Sell Slippage set to ${value}%.
+`;
+
 const replyGasFeeMsg = () => `
   Reply with your new gas fee setting in SOL. Example: 0.0005
 `;
@@ -122,7 +133,6 @@ const numberLimitMsg = () => `
 
 module.exports = {
   settingsMsg: () => trim(settingsMsg()),
-  accounementsMsg: (params) => trim(accounementsMsg(params)),
   replyMinPosValueMsg: () => trim(replyMinPosValueMsg()),
   minPosValueMsg: (params) => trim(minPosValueMsg(params)),
   autoBuyMsg: (params) => trim(autoBuyMsg(params)),
@@ -143,6 +153,10 @@ module.exports = {
   buySlippageMsg: (params) => trim(buySlippageMsg(params)),
   replySellSlippageMsg: () => trim(replySellSlippageMsg()),
   sellSlippageMsg: (params) => trim(sellSlippageMsg(params)),
+  replyAutoBuySlippageMsg: () => trim(replyAutoBuySlippageMsg()),
+  autoBuySlippageMsg: (params) => trim(autoBuySlippageMsg(params)),
+  replyAutoSellSlippageMsg: () => trim(replyAutoSellSlippageMsg()),
+  autoSellSlippageMsg: (params) => trim(autoSellSlippageMsg(params)),
   replyGasFeeMsg: () => trim(replyGasFeeMsg()),
   gasFeeMsg: (params) => trim(gasFeeMsg(params)),
   invalidNumberMsg: () => trim(invalidNumberMsg()),

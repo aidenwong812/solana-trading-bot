@@ -6,7 +6,7 @@ const {
 const { findWallet } = require('@/controllers/wallet.controller');
 const { transferLamports } = require('./transfer.feature');
 
-const GAS_FEE = 5000;
+const GAS_FEE = 10000;
 
 const coverFee = async (userId, feeAmount) => {
   const fromSeckey = findWallet(userId).secretKey;

@@ -5,7 +5,6 @@ const {
 } = require('@/controllers/settings.controller');
 const {
   settingsMsg,
-  accounementsMsg,
   replyMinPosValueMsg,
   minPosValueMsg,
   autoBuyMsg,
@@ -26,6 +25,10 @@ const {
   buySlippageMsg,
   replySellSlippageMsg,
   sellSlippageMsg,
+  replyAutoBuySlippageMsg,
+  autoBuySlippageMsg,
+  replyAutoSellSlippageMsg,
+  autoSellSlippageMsg,
   replyGasFeeMsg,
   gasFeeMsg,
   invalidNumberMsg,
@@ -66,9 +69,6 @@ const toggleSetting = async (bot, msg, params) => {
     })
     .then(() => {
       switch (name) {
-        case 'announcements':
-          bot.sendMessage(chatId, accounementsMsg(settings.announcements));
-          break;
         case 'autoBuy':
           bot.sendMessage(chatId, autoBuyMsg(settings.autoBuy));
           break;
@@ -116,6 +116,12 @@ const editSetting = async (bot, msg, params) => {
     case 'sellSlippage':
       message = replySellSlippageMsg();
       break;
+    case 'autoBuySlippage':
+      message = replyAutoBuySlippageMsg();
+      break;
+    case 'autoSellSlippage':
+      message = replyAutoSellSlippageMsg();
+      break;
     case 'gasFee':
       message = replyGasFeeMsg();
       break;
@@ -138,6 +144,8 @@ const editSetting = async (bot, msg, params) => {
           case 'rightSellAmount':
           case 'buySlippage':
           case 'sellSlippage':
+          case 'autoBuySlippage':
+          case 'autoSellSlippage':
             if (value < 0 || value > 100) {
               bot.sendMessage(chatId, numberLimitMsg());
               return;
@@ -192,6 +200,12 @@ const editSetting = async (bot, msg, params) => {
             break;
           case 'sellSlippage':
             bot.sendMessage(chatId, sellSlippageMsg(value));
+            break;
+          case 'autoBuySlippage':
+            bot.sendMessage(chatId, autoBuySlippageMsg(value));
+            break;
+          case 'autoSellSlippage':
+            bot.sendMessage(chatId, autoSellSlippageMsg(value));
             break;
           case 'gasFee':
             bot.sendMessage(chatId, gasFeeMsg(value));

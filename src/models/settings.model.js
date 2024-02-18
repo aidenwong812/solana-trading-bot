@@ -9,11 +9,6 @@ const Settings = sequelize.define(
       primaryKey: true,
       allowNull: false,
     },
-    announcements: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
-    },
     minPosValue: {
       type: DataTypes.FLOAT,
       allowNull: false,
@@ -65,6 +60,16 @@ const Settings = sequelize.define(
       defaultValue: 20,
     },
     sellSlippage: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 20,
+    },
+    autoBuySlippage: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 20,
+    },
+    autoSellSlippage: {
       type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 20,

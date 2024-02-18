@@ -6,7 +6,6 @@ const positionKeyboard = ({
   [{ text: '❌ Close', callback_data: 'close' }],
   [
     { text: '(1%) Tip SOL Amount', callback_data: `tipSOLAmount` },
-    { text: '✏️ Slippage % (49)', callback_data: `slippage` },
   ],
   [
     {
