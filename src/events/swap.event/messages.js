@@ -31,6 +31,12 @@ const wrapAutoBuy = (msg, mode, isAuto) => {
       <i>This trade was triggered with Auto Buy enabled. To enable confirmations or change the buy amount go to Settings (press /settings).</i>
     `;
   }
+  if (mode === 'sell' && isAuto) {
+    return `
+      ${msg}
+      <i>This trade was triggered with Auto Sell enabled. To enable confirmations or change the sell percent go to Settings (press /settings).</i>
+    `;
+  }
   return msg;
 };
 

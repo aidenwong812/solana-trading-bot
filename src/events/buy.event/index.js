@@ -56,7 +56,7 @@ const buyAmount = async (bot, msg, params) => {
     inputMint: 'So11111111111111111111111111111111111111112',
     outputMint: mintAddress,
     amount: amount * LAMPORTS_PER_SOL,
-    slippage: settings.buySlippage,
+    slippage: isAuto ? settings.autoBuySlippage : settings.buySlippage,
     mode: 'buy',
     isAuto,
   });

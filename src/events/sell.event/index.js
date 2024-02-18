@@ -30,13 +30,7 @@ const sellX = async (bot, msg, params) => {
 
 const sellPercent = async (bot, msg, params) => {
   const chatId = msg.chat.id;
-  const { ata, percent } = params;
-  
-  // const { tokenInfo, ownerProgram } = await getAccount(ata);
-  
-  const connection = new web3.Connection('https://api.mainnet-beta.solana.com', 'confirmed');
-  const accountPublicKey = new web3.PublicKey(ata);
-  const account = await getAccount(connection, accountPublicKey)
+  const { ata, percent, tokenInfo, isAuto } = params;
 
   const settings = await findSettings(chatId);
   if (settings === null) {
@@ -44,20 +38,28 @@ const sellPercent = async (bot, msg, params) => {
     return;
   }
 
-  // swap(bot, msg, {
-  //   inputMint: tokenInfo.tokenAddress,
-  //   outputMint: 'So11111111111111111111111111111111111111112',
-  //   amount: parseInt((tokenInfo.tokenAmount.amount * percent) / 100),
-  //   slippage: settings.sellSlippage,
-  //   mode: 'sell',
-  // });
-  swap(bot, msg, {
-    inputMint: account.mint.toBase58(),
-    outputMint: 'So11111111111111111111111111111111111111112',
-    amount: parseInt((parseInt(account.amount) * percent) / 100),
-    slippage: settings.sellSlippage,
-    mode: 'sell',
-  });
+  if (isAuto) {
+    swap(bot, msg, {
+      inputMint: tokenInfo.mint,
+      outputMint: 'So11111111111111111111111111111111111111112',
+      amount: parseInt((parseInt(tokenInfo.balance * (10 ** tokenInfo.decimals)) * percent) / 100),
+      slippage: settings.autoSellSlippage,
+      mode: 'sell',
+      isAuto,
+    });
+  } else {
+    const connection = new web3.Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+    const accountPublicKey = new web3.PublicKey(ata);
+    const account = await getAccount(connection, accountPublicKey)
+
+    swap(bot, msg, {
+      inputMint: account.mint.toBase58(),
+      outputMint: 'So11111111111111111111111111111111111111112',
+      amount: parseInt((parseInt(account.amount) * percent) / 100),
+      slippage: settings.sellSlippage,
+      mode: 'sell',
+    });
+  }
 };
 
 module.exports = {

@@ -5,13 +5,16 @@ const {
   WalletNotFoundError,
 } = require('@/errors/common');
 const { buyAmount } = require('@/events/buy.event');
+const { sellPercent } = require('@/events/sell.event');
 const { getPair } = require('@/services/dexscreener');
 const { getBalance } = require('@/services/solana');
 const { getTokenMetadata } = require('@/services/metaplex');
+const { getTokenAccountsByOwner } = require('@/features/token.feature');
 const {
   buyTokenMsg,
   tokenMsg,
   tokenNotFoundMsg,
+  tokenNotFoundInWalletMsg,
   noRouteMsg,
   autoBuyFailedMsg,
 } = require('./messages');
@@ -39,6 +42,11 @@ const processToken = async (bot, msg) => {
 
   if (settings.autoBuy) {
     autoBuyToken(bot, msg, {
+      mintAddress: msg.text,
+      settings,
+    });
+  } else if (settings.autoSell) {
+    autoSellToken(bot, msg, {
       mintAddress: msg.text,
       settings,
     });
@@ -88,6 +96,38 @@ const autoBuyToken = async (bot, msg, params) => {
   });
 };
 
+const autoSellToken = async (bot, msg, params) => {
+  const chatId = msg.chat.id;
+
+  const wallet = findWallet(chatId);
+  if (wallet === null) {
+    console.error(WalletNotFoundError);
+    return;
+  }
+
+  const { mintAddress, settings } = params;
+
+  try {
+    await getTokenMetadata(mintAddress);
+  } catch (e) {
+    console.error(e);
+    bot.sendMessage(chatId, tokenNotFoundMsg(mintAddress));
+    return;
+  }
+
+  const tokens = (await getTokenAccountsByOwner(wallet.publicKey)).filter((token) => token.mint === mintAddress);
+  if (tokens.length === 0) {
+    bot.sendMessage(chatId, tokenNotFoundInWalletMsg(mintAddress));
+    return;
+  }
+  
+  sellPercent(bot, msg, {
+    tokenInfo: tokens[0],
+    percent: settings.autoSellAmount,
+    isAuto: true,
+  });
+};
+
 const showToken = async (bot, msg, params) => {
   const chatId = msg.chat.id;
   const { mintAddress, refresh } = params;
@@ -127,7 +167,7 @@ const showToken = async (bot, msg, params) => {
           inline_keyboard: keyboard,
         },
       })
-      .catch(() => {});
+      .catch(() => { });
   }
 };
 
