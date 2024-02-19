@@ -2,9 +2,6 @@ const { trim } = require('@/utils');
 
 const settingsMsg = () => `
   <b>Settings:</b>
-    
-  <b>GENERAL SETTINGS</b>
-  <b>Minimum Position Value:</b> Minimum position value to show in portfolio. Will hide tokens below this threshhold. Tap to edit.
 
   <b>AUTO BUY</b>
   Immediately buy when pasting token address. Tap to toggle.

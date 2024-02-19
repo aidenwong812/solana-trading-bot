@@ -1,4 +1,4 @@
-const { buyToken, processToken, showToken } = require('@/events/token.event');
+const { buyToken, processToken, showToken, copyTrade } = require('@/events/token.event');
 
 const tokenRouter = (bot) => {
   bot.on('callback_query', (query) => {
@@ -7,6 +7,12 @@ const tokenRouter = (bot) => {
     switch (data[0]) {
       case 'buyToken':
         buyToken(bot, query.message);
+        break;
+      case 'refreshToken':
+        showToken(bot, query.message, { mintAddress: data[1], refresh: true });
+        break;
+      case 'copyTrades':
+        copyTrade(bot, query.message);
         break;
       case 'refreshToken':
         showToken(bot, query.message, { mintAddress: data[1], refresh: true });

@@ -14,13 +14,6 @@ const settingsKeyboard = ({
   autoSellSlippage,
   gasFee,
 }) => [
-  [{ text: '--- GENERAL SETTINGS ---', callback_data: 'none' }],
-  [
-    {
-      text: `✎ Min Pos Value: $${minPosValue}`,
-      callback_data: 'editSetting minPosValue',
-    },
-  ],
   [{ text: '--- TRANSACTION PRIORITY ---', callback_data: 'none' }],
   [
     {

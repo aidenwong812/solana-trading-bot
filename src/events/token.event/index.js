@@ -17,6 +17,7 @@ const {
   tokenNotFoundInWalletMsg,
   noRouteMsg,
   autoBuyFailedMsg,
+  copyWalletAddressMsg,
 } = require('./messages');
 const { buyTokenKeyboard, tokenKeyboard } = require('./keyboards');
 
@@ -120,7 +121,7 @@ const autoSellToken = async (bot, msg, params) => {
     bot.sendMessage(chatId, tokenNotFoundInWalletMsg(mintAddress));
     return;
   }
-  
+
   sellPercent(bot, msg, {
     tokenInfo: tokens[0],
     percent: settings.autoSellAmount,
@@ -233,9 +234,27 @@ showToken.getMessage = async ({ walletAddress, mintAddress, settings }) => {
   };
 };
 
+const copyTrade = (bot, msg) => {
+  const chatId = msg.chat.id;
+  bot
+    .sendMessage(chatId, copyWalletAddressMsg(), {
+      parse_mode: 'HTML',
+      reply_markup: {
+        force_reply: true,
+      },
+    })
+    .then(({ message_id }) => {
+      console.log(message_id)
+      // bot.onReplyToMessage(chatId, message_id, (reply) => {
+      //   console.log(reply)
+      // });
+    })
+}
+
 module.exports = {
   buyToken,
   processToken,
   showToken,
   autoBuyToken,
+  copyTrade,
 };

@@ -37,6 +37,8 @@ const tokenMsg = ({
   `;
 };
 
+const copyWalletAddressMsg = () => 'Input a wallet to copy trade'
+
 const noRouteMsg = ({ tokenName, tokenSymbol, mintAddress, walletBalance }) => `
   ${tokenName} | <b>${tokenSymbol}</b> | <code>${mintAddress}</code>
 
@@ -68,6 +70,7 @@ const autoBuyFailedMsg = ({ amount, walletBalance }) => `
 module.exports = {
   buyTokenMsg: () => trim(buyTokenMsg()),
   tokenMsg: (params) => trim(tokenMsg(params)),
+  copyWalletAddressMsg: () => trim(copyWalletAddressMsg()),
   tokenNotFoundMsg: (params) => trim(tokenNotFoundMsg(params)),
   tokenNotFoundInWalletMsg: (params) => trim(tokenNotFoundInWalletMsg(params)),
   noRouteMsg: (params) => trim(noRouteMsg(params)),
