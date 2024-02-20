@@ -14,9 +14,6 @@ const tokenRouter = (bot) => {
       case 'copyTrades':
         copyTrade(bot, query.message);
         break;
-      case 'refreshToken':
-        showToken(bot, query.message, { mintAddress: data[1], refresh: true });
-        break;
       default:
     }
   });

@@ -2,6 +2,8 @@ const {
   showSettings,
   toggleSetting,
   editSetting,
+  addStrategy,
+  editStrategy
 } = require('@/events/settings.event');
 
 const settingsRouter = (bot) => {
@@ -27,6 +29,15 @@ const settingsRouter = (bot) => {
       case 'editSetting':
         editSetting(bot, query.message, {
           name: data[1],
+        });
+        break;
+      case 'addStrategy':
+        addStrategy(bot, query.message);
+        break;
+      case 'editStrategy':
+        editStrategy(bot, query.message, {
+          name: data[1],
+          id: data[2]
         });
         break;
       default:

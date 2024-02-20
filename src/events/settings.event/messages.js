@@ -3,8 +3,29 @@ const { trim } = require('@/utils');
 const settingsMsg = () => `
   <b>Settings:</b>
 
+  <b>TRANSACTION PRIORITY</b>
+  🚀 Fast/Turbo/Custom Fee: Set your preferred priority fee to decrease likelihood of failed transactions.
+
   <b>AUTO BUY</b>
   Immediately buy when pasting token address. Tap to toggle.
+
+  <b>AUTO SELL</b>
+  Automatically set your specified limit sell orders for any swap or Auto Buy made. Click “Add Order” to add additional orders to your strategy. Reply “none” to either prompt to remove an order.
+
+  - Set a S/L by using a negative percentage (-XX%) and updating the sell amount to 100% or less.
+              
+  - Set a T/P strategy by setting as many limit TP targets as you would like. The Amount column for T/P should add up to only 100%. Structure accordingly.
+              
+  Finally, set your slippage for the Auto Sell limit orders.
+              
+  Note: If you perform multiple buys, be sure to close the limits previously set.
+
+  Example: -25% SL with 4 TP targets.
+  -25%; 100%
+  100%; 50% (i.e. takes out your initials)
+  250%; 20%
+  400%; 20%
+  1000%; 10%
 
   <b>BUTTONS CONFIG</b>
   Customize your buy and sell buttons for buy token and manage position. Tap to edit.
@@ -36,16 +57,8 @@ const replyAutoBuyAmountMsg = () => `
   Reply with your new Auto Buy Amount in SOL. Example: 0.5
 `;
 
-const replyAutoSellAmountMsg = () => `
-  Reply with your new Auto Sell Amount in %. Example: 50
-`;
-
 const autoBuyAmountMsg = (value) => `
   Auto Buy Amount set to ${value} SOL.
-`;
-
-const autoSellAmountMsg = (value) => `
-  Auto Sell Amount set to ${value} %.
 `;
 
 const replyLeftBuyAmountMsg = () => `
@@ -116,6 +129,30 @@ const replyGasFeeMsg = () => `
   Reply with your new gas fee setting in SOL. Example: 0.0005
 `;
 
+const replyStrategyPercentMsg = () => `
+  Reply with your new T/P(S/L) setting in %. Example: 50(-25)
+`;
+
+const strategyPercentMsg = (value) => `
+  T/P(S/L) set to ${value}%.
+`;
+
+const replyStrategyAmountMsg = () => `
+  Reply with your new sell amount setting in % (0 - 100%). Example: 50
+`;
+
+const strategyAmountMsg = (value) => `
+  Sell Amount set to ${value}%.
+`;
+
+const replyOrderMsg = () => `
+  Reply with your new order setting. Example: -25 50
+`;
+
+const orderMsg = () => `
+  New Order added.
+`;
+
 const gasFeeMsg = (value) => `
   Gas fee set to ${value} SOL.
 `;
@@ -135,9 +172,7 @@ module.exports = {
   autoBuyMsg: (params) => trim(autoBuyMsg(params)),
   autoSellMsg: (params) => trim(autoSellMsg(params)),
   replyAutoBuyAmountMsg: () => trim(replyAutoBuyAmountMsg()),
-  replyAutoSellAmountMsg: () => trim(replyAutoSellAmountMsg()),
   autoBuyAmountMsg: (params) => trim(autoBuyAmountMsg(params)),
-  autoSellAmountMsg: (params) => trim(autoSellAmountMsg(params)),
   replyLeftBuyAmountMsg: () => trim(replyLeftBuyAmountMsg()),
   leftBuyAmountMsg: (params) => trim(leftBuyAmountMsg(params)),
   replyRightBuyAmountMsg: () => trim(replyRightBuyAmountMsg()),
@@ -156,6 +191,12 @@ module.exports = {
   autoSellSlippageMsg: (params) => trim(autoSellSlippageMsg(params)),
   replyGasFeeMsg: () => trim(replyGasFeeMsg()),
   gasFeeMsg: (params) => trim(gasFeeMsg(params)),
+  replyStrategyPercentMsg: () => trim(replyStrategyPercentMsg()),
+  strategyPercentMsg: (params) => trim(strategyPercentMsg(params)),
+  replyStrategyAmountMsg: () => trim(replyStrategyAmountMsg()),
+  strategyAmountMsg: (params) => trim(strategyAmountMsg(params)),
+  replyOrderMsg: () => trim(replyOrderMsg()),
+  orderMsg: () => trim(orderMsg()),
   invalidNumberMsg: () => trim(invalidNumberMsg()),
   numberLimitMsg: () => trim(numberLimitMsg()),
 };

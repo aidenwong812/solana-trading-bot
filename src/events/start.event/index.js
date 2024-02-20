@@ -6,10 +6,29 @@ const { getTradesData } = require('@/controllers/trade.controller');
 const { WalletNotFoundError } = require('@/errors/common');
 const { getTokenAccountsByOwner } = require('@/features/token.feature');
 const { getBalance } = require('@/services/solana');
+const { clearAllInterval, setIntervalID } = require('@/store');
 const { welcomeMsg, positionsMsg } = require('./messages');
 const { startKeyboard } = require('./keyboards');
 
+const TimeInterval = 30 * 1000;
+
 const start = async (bot, msg, params) => {
+  await startInterval(bot, msg, params);
+
+  clearAllInterval();
+
+  const id = setInterval(async () => {
+    await startInterval(bot, msg, { ...params, refresh: true });
+  }, TimeInterval)
+
+  setIntervalID({
+    start: id,
+    managePostition: null,
+    token: null,
+  })
+};
+
+const startInterval = async (bot, msg, params) => {
   const chatId = msg.chat.id;
   const { code, refresh } = params;
 
@@ -25,7 +44,7 @@ const start = async (bot, msg, params) => {
     return;
   }
 
-  const { message, keyboard } = await start.getMessage(
+  const { message, keyboard } = await startInterval.getMessage(
     chatId,
     wallet.publicKey
   );
@@ -49,11 +68,11 @@ const start = async (bot, msg, params) => {
           inline_keyboard: keyboard,
         },
       })
-      .catch(() => {});
+      .catch(() => { });
   }
 };
 
-start.getMessage = async (userId, walletAddress) => {
+startInterval.getMessage = async (userId, walletAddress) => {
   const walletBalance = await getBalance(walletAddress);
   const tokenAccounts = await getTokenAccountsByOwner(walletAddress);
 

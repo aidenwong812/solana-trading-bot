@@ -10,6 +10,7 @@ const { getPair } = require('@/services/dexscreener');
 const { getBalance } = require('@/services/solana');
 const { getTokenMetadata } = require('@/services/metaplex');
 const { getTokenAccountsByOwner } = require('@/features/token.feature');
+const { clearAllInterval, setIntervalID } = require('@/store');
 const {
   buyTokenMsg,
   tokenMsg,
@@ -130,6 +131,22 @@ const autoSellToken = async (bot, msg, params) => {
 };
 
 const showToken = async (bot, msg, params) => {
+  await showTokenInterval(bot, msg, params);
+
+  clearAllInterval();
+
+  const id = setInterval(async () => {
+    await showTokenInterval(bot, msg, { ...params, refresh: true });
+  }, TimeInterval)
+
+  setIntervalID({
+    start: null,
+    managePostition: null,
+    token: id,
+  })
+};
+
+const showTokenInterval = async (bot, msg, params) => {
   const chatId = msg.chat.id;
   const { mintAddress, refresh } = params;
 
@@ -145,7 +162,7 @@ const showToken = async (bot, msg, params) => {
     return;
   }
 
-  const { message, keyboard } = await showToken.getMessage({
+  const { message, keyboard } = await showTokenInterval.getMessage({
     walletAddress: wallet.publicKey,
     mintAddress,
     settings,
@@ -170,9 +187,9 @@ const showToken = async (bot, msg, params) => {
       })
       .catch(() => { });
   }
-};
+}
 
-showToken.getMessage = async ({ walletAddress, mintAddress, settings }) => {
+showTokenInterval.getMessage = async ({ walletAddress, mintAddress, settings }) => {
   let metadata, walletBalance;
   let priceUsd, priceChange;
   let liquidity, pooledSol;
@@ -244,10 +261,9 @@ const copyTrade = (bot, msg) => {
       },
     })
     .then(({ message_id }) => {
-      console.log(message_id)
-      // bot.onReplyToMessage(chatId, message_id, (reply) => {
-      //   console.log(reply)
-      // });
+      bot.onReplyToMessage(chatId, message_id, (reply) => {
+        const value = reply.text;
+      });
     })
 }
 

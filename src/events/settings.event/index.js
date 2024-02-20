@@ -3,6 +3,7 @@ const {
   findSettings,
   updateSettings,
 } = require('@/controllers/settings.controller');
+const { createStrategy, updateStrategy } = require('@/controllers/strategy.controller');
 const {
   settingsMsg,
   replyMinPosValueMsg,
@@ -10,9 +11,7 @@ const {
   autoBuyMsg,
   autoSellMsg,
   replyAutoBuyAmountMsg,
-  replyAutoSellAmountMsg,
   autoBuyAmountMsg,
-  autoSellAmountMsg,
   replyLeftBuyAmountMsg,
   leftBuyAmountMsg,
   replyRightBuyAmountMsg,
@@ -31,6 +30,12 @@ const {
   autoSellSlippageMsg,
   replyGasFeeMsg,
   gasFeeMsg,
+  replyStrategyPercentMsg,
+  strategyPercentMsg,
+  replyStrategyAmountMsg,
+  strategyAmountMsg,
+  replyOrderMsg,
+  orderMsg,
   invalidNumberMsg,
   numberLimitMsg,
 } = require('./messages');
@@ -95,9 +100,6 @@ const editSetting = async (bot, msg, params) => {
     case 'autoBuyAmount':
       message = replyAutoBuyAmountMsg();
       break;
-    case 'autoSellAmount':
-      message = replyAutoSellAmountMsg();
-      break;
     case 'leftBuyAmount':
       message = replyLeftBuyAmountMsg();
       break;
@@ -153,7 +155,6 @@ const editSetting = async (bot, msg, params) => {
           case 'minPosValue':
           case 'gasFee':
           case 'autoBuyAmount':
-          case 'autoSellAmount':
           case 'leftBuyAmount':
           case 'rightBuyAmount':
             if (isNaN(value)) {
@@ -179,9 +180,6 @@ const editSetting = async (bot, msg, params) => {
             break;
           case 'autoBuyAmount':
             bot.sendMessage(chatId, autoBuyAmountMsg(value));
-            break;
-          case 'autoSellAmount':
-            bot.sendMessage(chatId, autoSellAmountMsg(value));
             break;
           case 'leftBuyAmount':
             bot.sendMessage(chatId, leftBuyAmountMsg(value));
@@ -216,8 +214,115 @@ const editSetting = async (bot, msg, params) => {
     });
 };
 
+const addStrategy = async (bot, msg) => {
+  const chatId = msg.chat.id;
+  
+  bot
+    .sendMessage(chatId, replyOrderMsg(), {
+      reply_markup: {
+        force_reply: true,
+      },
+    })
+    .then(({ message_id }) => {
+      bot.onReplyToMessage(chatId, message_id, async (reply) => {
+        const text = reply.text.split(' ');
+        
+        const percent = parseInt(text[0]);
+        const amount = parseInt(text[1]);
+        if (text.length < 2) {
+          bot.sendMessage(chatId, invalidNumberMsg());
+          return;
+        }
+        if (amount > 100) {
+          bot.sendMessage(chatId, numberLimitMsg());
+          return;
+        }
+
+        await createStrategy({ userId: chatId, percent, amount });
+        const settings = await findSettings(chatId);
+
+        bot.editMessageText(settingsMsg(settings), {
+          chat_id: chatId,
+          message_id: msg.message_id,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: settingsKeyboard(settings),
+          },
+        });
+
+        bot.sendMessage(chatId, orderMsg());
+      });
+    });
+};
+
+const editStrategy = async (bot, msg, params) => {
+  const chatId = msg.chat.id;
+  const { name, id } = params;
+  let message;
+
+  switch (name) {
+    case 'percent':
+      message = replyStrategyPercentMsg();
+      break;
+    case 'amount':
+      message = replyStrategyAmountMsg();
+      break;
+    default:
+      message = '';
+  }
+
+  bot
+    .sendMessage(chatId, message, {
+      reply_markup: {
+        force_reply: true,
+      },
+    })
+    .then(({ message_id }) => {
+      bot.onReplyToMessage(chatId, message_id, async (reply) => {
+        const value = parseFloat(reply.text);
+
+        switch (name) {
+          case 'percent':
+          case 'amount':
+            if (value > 100) {
+              bot.sendMessage(chatId, numberLimitMsg());
+              return;
+            }
+            if (isNaN(value)) {
+              bot.sendMessage(chatId, invalidNumberMsg());
+              return;
+            }
+        }
+
+        await updateStrategy(id, { [name]: value });
+        const settings = await findSettings(chatId);
+
+        bot.editMessageText(settingsMsg(settings), {
+          chat_id: chatId,
+          message_id: msg.message_id,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: settingsKeyboard(settings),
+          },
+        });
+
+        switch (name) {
+          case 'percent':
+            bot.sendMessage(chatId, strategyPercentMsg(value));
+            break;
+          case 'amount':
+            bot.sendMessage(chatId, strategyAmountMsg(value));
+            break;
+          default:
+        }
+      });
+    });
+};
+
 module.exports = {
   showSettings,
   toggleSetting,
   editSetting,
+  addStrategy,
+  editStrategy,
 };

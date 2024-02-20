@@ -29,11 +29,6 @@ const Settings = sequelize.define(
       allowNull: false,
       defaultValue: false,
     },
-    autoSellAmount: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 50,
-    },
     leftBuyAmount: {
       type: DataTypes.FLOAT,
       allowNull: false,

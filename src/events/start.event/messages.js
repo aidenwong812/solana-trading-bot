@@ -14,6 +14,8 @@ const welcomeMsg = ({ walletAddress, walletBalance }) => {
       Advanced traders can enable Auto Buy in their settings. When enabled, STRIKEbot will instantly buy any token you enter with a fixed amount that you set. This is disabled by default.
 
       Wallet: <code>${walletAddress}</code>
+
+      💰Fee Discount: You are receiving a 10% discount on trading fees for being a referral of another user.
     `;
   }
 
@@ -31,6 +33,8 @@ const welcomeMsg = ({ walletAddress, walletBalance }) => {
     To buy a token just enter a token address of the coin.
 
     For more info on your wallet and to retrieve your private key, type <code>/wallet</code> command. We guarantee the safety of user funds on STRIKEbot, but if you expose your private key your funds will not be safe.    
+
+    💰Fee Discount: You are receiving a 10% discount on trading fees for being a referral of another user.
   `;
 };
 
