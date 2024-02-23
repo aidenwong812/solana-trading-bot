@@ -17,15 +17,15 @@ const start = async (bot, msg, params) => {
 
   clearAllInterval();
 
-  const id = setInterval(async () => {
-    await startInterval(bot, msg, { ...params, refresh: true });
-  }, TimeInterval)
+  // const id = setInterval(async () => {
+  //   await startInterval(bot, msg, { ...params, refresh: true });
+  // }, TimeInterval)
 
-  setIntervalID({
-    start: id,
-    managePostition: null,
-    token: null,
-  })
+  // setIntervalID({
+  //   start: id,
+  //   managePostition: null,
+  //   token: null,
+  // })
 };
 
 const startInterval = async (bot, msg, params) => {

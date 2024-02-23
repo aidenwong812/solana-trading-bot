@@ -146,7 +146,15 @@ const strategyAmountMsg = (value) => `
 `;
 
 const replyOrderMsg = () => `
-  Reply with your new order setting. Example: -25 50
+  Respond with the desired order for Take Profit / Stop Loss.
+
+  Example:
+
+  200 100
+  If you want to exit at 2x with 100% of your position
+
+  -30 100
+  If you want to exit the position 100% with a 30% loss
 `;
 
 const orderMsg = () => `

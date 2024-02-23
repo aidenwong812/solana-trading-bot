@@ -16,20 +16,22 @@ const { clearAllInterval } = require('@/store');
 const { positionMessage, noOpenPositionsMessage } = require('./messages');
 const { positionKeyboard, noOpenPositionsKeyboard } = require('./keyboards');
 
+const TimeInterval = 30 * 1000;
+
 const managePositions = async (bot, msg, params) => {
   await managePositionsInterval(bot, msg, params);
 
   clearAllInterval();
 
-  const id = setInterval(async () => {
-    await managePositionsInterval(bot, msg, { ...params, refresh: true });
-  }, TimeInterval)
+  // const id = setInterval(async () => {
+  //   await managePositionsInterval(bot, msg, { ...params, refresh: true });
+  // }, TimeInterval)
 
-  setIntervalID({
-    start: null,
-    managePostition: id,
-    token: null,
-  })
+  // setIntervalID({
+  //   start: null,
+  //   managePostition: id,
+  //   token: null,
+  // })
 };
 
 const managePositionsInterval = async (bot, msg, params) => {

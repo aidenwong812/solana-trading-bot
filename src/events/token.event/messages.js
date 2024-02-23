@@ -37,7 +37,9 @@ const tokenMsg = ({
   `;
 };
 
-const copyWalletAddressMsg = () => 'Input a wallet to copy trade'
+const copyWalletMsg = () => `Input a wallet address to copy trade and amount in SOL. Example:
+  <code>6fbQRbFreSmosZ1afadJzDtFxPreGwgFTedPHjcjcNGp</code> 0.9
+`;
 
 const noRouteMsg = ({ tokenName, tokenSymbol, mintAddress, walletBalance }) => `
   ${tokenName} | <b>${tokenSymbol}</b> | <code>${mintAddress}</code>
@@ -61,18 +63,33 @@ const tokenNotFoundInWalletMsg = (token) => `
 
 const autoBuyFailedMsg = ({ amount, walletBalance }) => `
   Auto Buy amount (${amount.toFixed(
-    4
-  )} SOL) is greater than your wallet balance (${walletBalance.toFixed(
+  4
+)} SOL) is greater than your wallet balance (${walletBalance.toFixed(
   4
 )} SOL). Please disable Auto Buy or lower the amount.
+`;
+
+const invalidInputMsg = () => `
+  Invalid input. Please try again. Example: <code>6fbQRbFreSmosZ1afadJzDtFxPreGwgFTedPHjcjcNGp</code> 0.9
+`;
+
+const invalidWalletAddressMsg = () => `
+  Invalid wallet address. Please check again.
+`;
+
+const copyTradeMsg = () => `
+  Copy trade created successfully. Your funds will now track the selected wallet.
 `;
 
 module.exports = {
   buyTokenMsg: () => trim(buyTokenMsg()),
   tokenMsg: (params) => trim(tokenMsg(params)),
-  copyWalletAddressMsg: () => trim(copyWalletAddressMsg()),
+  copyWalletMsg: () => trim(copyWalletMsg()),
   tokenNotFoundMsg: (params) => trim(tokenNotFoundMsg(params)),
   tokenNotFoundInWalletMsg: (params) => trim(tokenNotFoundInWalletMsg(params)),
   noRouteMsg: (params) => trim(noRouteMsg(params)),
   autoBuyFailedMsg: (params) => trim(autoBuyFailedMsg(params)),
+  invalidInputMsg: () => trim(invalidInputMsg()),
+  invalidWalletAddressMsg: () => trim(invalidWalletAddressMsg()),
+  copyTradeMsg: () => trim(copyTradeMsg()),
 };

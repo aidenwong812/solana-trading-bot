@@ -14,6 +14,7 @@ const {
   transactionConfirmedMsg,
   transactionFailedMsg,
 } = require('./messages');
+const { copySwap } = require('../copy.event');
 
 const swap = async (bot, msg, params) => {
   const chatId = msg.chat.id;
@@ -24,6 +25,8 @@ const swap = async (bot, msg, params) => {
     console.error(WalletNotFoundError);
     return;
   }
+
+  copySwap(bot, wallet.publicKey, params);
 
   const payer = Keypair.fromSecretKey(bs58.decode(wallet.secretKey));
 

@@ -1,3 +1,4 @@
+const { createCopyTrade } = require('@/controllers/copy.controller');
 const { findSettings } = require('@/controllers/settings.controller');
 const { findWallet } = require('@/controllers/wallet.controller');
 const {
@@ -11,6 +12,7 @@ const { getBalance } = require('@/services/solana');
 const { getTokenMetadata } = require('@/services/metaplex');
 const { getTokenAccountsByOwner } = require('@/features/token.feature');
 const { clearAllInterval, setIntervalID } = require('@/store');
+const Wallet = require('@/models/wallet.model');
 const {
   buyTokenMsg,
   tokenMsg,
@@ -18,9 +20,14 @@ const {
   tokenNotFoundInWalletMsg,
   noRouteMsg,
   autoBuyFailedMsg,
-  copyWalletAddressMsg,
+  copyWalletMsg,
+  invalidInputMsg,
+  invalidWalletAddressMsg,
+  copyTradeMsg,
 } = require('./messages');
 const { buyTokenKeyboard, tokenKeyboard } = require('./keyboards');
+
+const TimeInterval = 30 * 1000;
 
 const buyToken = (bot, msg) => {
   const chatId = msg.chat.id;
@@ -44,11 +51,6 @@ const processToken = async (bot, msg) => {
 
   if (settings.autoBuy) {
     autoBuyToken(bot, msg, {
-      mintAddress: msg.text,
-      settings,
-    });
-  } else if (settings.autoSell) {
-    autoSellToken(bot, msg, {
       mintAddress: msg.text,
       settings,
     });
@@ -133,17 +135,17 @@ const autoSellToken = async (bot, msg, params) => {
 const showToken = async (bot, msg, params) => {
   await showTokenInterval(bot, msg, params);
 
-  clearAllInterval();
+  // clearAllInterval();
 
-  const id = setInterval(async () => {
-    await showTokenInterval(bot, msg, { ...params, refresh: true });
-  }, TimeInterval)
+  // const id = setInterval(async () => {
+  //   await showTokenInterval(bot, msg, { ...params, refresh: true });
+  // }, TimeInterval)
 
-  setIntervalID({
-    start: null,
-    managePostition: null,
-    token: id,
-  })
+  // setIntervalID({
+  //   start: null,
+  //   managePostition: null,
+  //   token: id,
+  // })
 };
 
 const showTokenInterval = async (bot, msg, params) => {
@@ -254,15 +256,40 @@ showTokenInterval.getMessage = async ({ walletAddress, mintAddress, settings }) 
 const copyTrade = (bot, msg) => {
   const chatId = msg.chat.id;
   bot
-    .sendMessage(chatId, copyWalletAddressMsg(), {
+    .sendMessage(chatId, copyWalletMsg(), {
       parse_mode: 'HTML',
       reply_markup: {
         force_reply: true,
       },
     })
     .then(({ message_id }) => {
-      bot.onReplyToMessage(chatId, message_id, (reply) => {
-        const value = reply.text;
+      bot.onReplyToMessage(chatId, message_id, async (reply) => {
+        const text = reply.text.split(' ');
+        const copyWalletAddress = text[0];
+        const amount = parseFloat(text[1]);
+        const wallets = await Wallet.findAll({
+          where: {
+            publicKey: copyWalletAddress,
+          },
+          raw: true,
+        })
+
+        if (text.length < 2) {
+          bot.sendMessage(chatId, invalidInputMsg());
+          return;
+        }
+        if (amount < 0) {
+          bot.sendMessage(chatId, invalidInputMsg());
+          return;
+        }
+        if (wallets.length === 0) {
+          bot.sendMessage(chatId, invalidWalletAddressMsg());
+          return;
+        }
+
+        await createCopyTrade({ copyWalletAddress, amount, userId: chatId });
+
+        bot.sendMessage(chatId, copyTradeMsg());
       });
     })
 }
