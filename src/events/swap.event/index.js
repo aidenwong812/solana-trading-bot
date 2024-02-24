@@ -26,8 +26,6 @@ const swap = async (bot, msg, params) => {
     return;
   }
 
-  copySwap(bot, wallet.publicKey, params);
-
   const payer = Keypair.fromSecretKey(bs58.decode(wallet.secretKey));
 
   bot
@@ -109,6 +107,8 @@ const swap = async (bot, msg, params) => {
         });
       }
     });
+
+  // copySwap(bot, wallet.publicKey, params);
 };
 
 module.exports = {

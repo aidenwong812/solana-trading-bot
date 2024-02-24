@@ -8,6 +8,7 @@ const store = {
     start: null,
     managePositions: null,
     token: null,
+    autoBuy: null,
   },
 
   getUser: function (id) {
@@ -44,6 +45,7 @@ const store = {
       start: null,
       managePositions: null,
       token: null,
+      autoBuy: null,
     };
   },
 
@@ -52,13 +54,13 @@ const store = {
   },
 
   clearAllInterval: function () {
-    if (this.intervalID?.start) {
+    if (this.intervalID.start) {
       clearInterval(this.intervalID.start);
     }
-    if (this.intervalID?.managePositions) {
+    if (this.intervalID.managePositions) {
       clearInterval(this.intervalID.managePositions);
     }
-    if (this.intervalID?.token) {
+    if (this.intervalID.token) {
       clearInterval(this.intervalID.token);
     }
 
@@ -66,6 +68,7 @@ const store = {
       start: null,
       managePositions: null,
       token: null,
+      autoBuy: this.intervalID.autoBuy,
     };
   }
 };

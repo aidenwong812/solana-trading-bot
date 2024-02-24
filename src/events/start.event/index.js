@@ -1,9 +1,10 @@
 const { LAMPORTS_PER_SOL } = require('@solana/web3.js');
+const { createSettings, findSettings } = require('@/controllers/settings.controller');
+const { getTradesData } = require('@/controllers/trade.controller');
 const { createUser, findUser } = require('@/controllers/user.controller');
 const { createWallet, findWallet } = require('@/controllers/wallet.controller');
-const { createSettings } = require('@/controllers/settings.controller');
-const { getTradesData } = require('@/controllers/trade.controller');
 const { WalletNotFoundError } = require('@/errors/common');
+const { autoSellToken } = require('@/events/token.event');
 const { getTokenAccountsByOwner } = require('@/features/token.feature');
 const { getBalance } = require('@/services/solana');
 const { clearAllInterval, setIntervalID } = require('@/store');
@@ -14,18 +15,24 @@ const TimeInterval = 30 * 1000;
 
 const start = async (bot, msg, params) => {
   await startInterval(bot, msg, params);
+  await autoSellToken(bot, msg);
 
   clearAllInterval();
 
-  // const id = setInterval(async () => {
-  //   await startInterval(bot, msg, { ...params, refresh: true });
-  // }, TimeInterval)
+  const startId = setInterval(async () => {
+    await startInterval(bot, msg, { ...params, refresh: true });
+  }, TimeInterval)
 
-  // setIntervalID({
-  //   start: id,
-  //   managePostition: null,
-  //   token: null,
-  // })
+  const autoSellId = setInterval(async () => {
+    await autoSellToken(bot, msg);
+  }, TimeInterval)
+
+  setIntervalID({
+    start: startId,
+    managePostition: null,
+    token: null,
+    autoSell: autoSellId,
+  })
 };
 
 const startInterval = async (bot, msg, params) => {
@@ -69,6 +76,12 @@ const startInterval = async (bot, msg, params) => {
         },
       })
       .catch(() => { });
+  }
+
+  const settings = await findSettings(chatId);
+  if (settings === null) {
+    console.error(SettingsNotFoundError);
+    return;
   }
 };
 

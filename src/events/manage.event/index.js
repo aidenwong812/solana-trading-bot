@@ -23,15 +23,15 @@ const managePositions = async (bot, msg, params) => {
 
   clearAllInterval();
 
-  // const id = setInterval(async () => {
-  //   await managePositionsInterval(bot, msg, { ...params, refresh: true });
-  // }, TimeInterval)
+  const id = setInterval(async () => {
+    await managePositionsInterval(bot, msg, { ...params, refresh: true });
+  }, TimeInterval)
 
-  // setIntervalID({
-  //   start: null,
-  //   managePostition: id,
-  //   token: null,
-  // })
+  setIntervalID({
+    start: null,
+    managePostition: id,
+    token: null,
+  })
 };
 
 const managePositionsInterval = async (bot, msg, params) => {

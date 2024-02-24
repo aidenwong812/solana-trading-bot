@@ -61,6 +61,7 @@ const buyAmount = async (bot, msg, params) => {
     isAuto,
   });
 };
+
 module.exports = {
   buyX,
   buyAmount,

@@ -1,5 +1,9 @@
+const { LAMPORTS_PER_SOL } = require('@solana/web3.js');
 const { createCopyTrade } = require('@/controllers/copy.controller');
 const { findSettings } = require('@/controllers/settings.controller');
+const { findStrategy } = require('@/controllers/strategy.controller');
+const { getTradesData } = require('@/controllers/trade.controller');
+const { findUser } = require('@/controllers/user.controller');
 const { findWallet } = require('@/controllers/wallet.controller');
 const {
   SettingsNotFoundError,
@@ -100,8 +104,22 @@ const autoBuyToken = async (bot, msg, params) => {
   });
 };
 
-const autoSellToken = async (bot, msg, params) => {
+const autoSellToken = async (bot, msg) => {
   const chatId = msg.chat.id;
+
+  if (findUser(chatId) === null) {
+    console.log('New User');
+    return;
+  }
+
+  const settings = await findSettings(chatId);
+  if (settings === null) {
+    console.error(SettingsNotFoundError);
+    return;
+  }
+  if (!settings.autoSell) {
+    return;
+  }
 
   const wallet = findWallet(chatId);
   if (wallet === null) {
@@ -109,43 +127,68 @@ const autoSellToken = async (bot, msg, params) => {
     return;
   }
 
-  const { mintAddress, settings } = params;
+  const tokens = await getTokenAccountsByOwner(wallet.publicKey);
 
-  try {
-    await getTokenMetadata(mintAddress);
-  } catch (e) {
-    console.error(e);
-    bot.sendMessage(chatId, tokenNotFoundMsg(mintAddress));
-    return;
-  }
-
-  const tokens = (await getTokenAccountsByOwner(wallet.publicKey)).filter((token) => token.mint === mintAddress);
   if (tokens.length === 0) {
-    bot.sendMessage(chatId, tokenNotFoundInWalletMsg(mintAddress));
+    console.log('Empty Token')
     return;
   }
 
-  sellPercent(bot, msg, {
-    tokenInfo: tokens[0],
-    percent: settings.autoSellAmount,
-    isAuto: true,
+  tokens.forEach(async (token) => {
+    try {
+      await getTokenMetadata(token.mint);
+    } catch (e) {
+      console.error(e);
+      bot.sendMessage(chatId, tokenNotFoundMsg(token.mint));
+      return;
+    }
+
+    const { mint, decimals, priceNative } = token;
+    const { initial, baseAmount, quoteAmount } = await getTradesData(
+      chatId,
+      mint
+    );
+
+    const profitSol =
+      (quoteAmount / 10 ** decimals) * priceNative -
+      baseAmount / LAMPORTS_PER_SOL;
+    const profitPercent = (profitSol * 100.0) / (initial / LAMPORTS_PER_SOL);
+
+    const strategies = await findStrategy(chatId);
+    for (const strategy of strategies) {
+      console.log(strategy, ' ---- ', profitPercent)
+      if (profitPercent > 0 && profitPercent >= strategy.percent) {
+        sellPercent(bot, msg, {
+          tokenInfo: token,
+          percent: strategy.amount,
+          isAuto: true,
+        });
+      }
+      if (profitPercent < 0 && profitPercent <= strategy.percent) {
+        sellPercent(bot, msg, {
+          tokenInfo: token,
+          percent: strategy.amount,
+          isAuto: true,
+        });
+      }
+    }
   });
 };
 
 const showToken = async (bot, msg, params) => {
   await showTokenInterval(bot, msg, params);
 
-  // clearAllInterval();
+  clearAllInterval();
 
-  // const id = setInterval(async () => {
-  //   await showTokenInterval(bot, msg, { ...params, refresh: true });
-  // }, TimeInterval)
+  const id = setInterval(async () => {
+    await showTokenInterval(bot, msg, { ...params, refresh: true });
+  }, TimeInterval)
 
-  // setIntervalID({
-  //   start: null,
-  //   managePostition: null,
-  //   token: id,
-  // })
+  setIntervalID({
+    start: null,
+    managePostition: null,
+    token: id,
+  })
 };
 
 const showTokenInterval = async (bot, msg, params) => {
@@ -299,5 +342,6 @@ module.exports = {
   processToken,
   showToken,
   autoBuyToken,
+  autoSellToken,
   copyTrade,
 };
