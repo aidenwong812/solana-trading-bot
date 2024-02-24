@@ -8,7 +8,7 @@ const store = {
     start: null,
     managePositions: null,
     token: null,
-    autoBuy: null,
+    autoSell: null,
   },
 
   getUser: function (id) {
@@ -45,7 +45,7 @@ const store = {
       start: null,
       managePositions: null,
       token: null,
-      autoBuy: null,
+      autoSell: null,
     };
   },
 
@@ -68,7 +68,7 @@ const store = {
       start: null,
       managePositions: null,
       token: null,
-      autoBuy: this.intervalID.autoBuy,
+      autoSell: this.intervalID.autoSell,
     };
   }
 };

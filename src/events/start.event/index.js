@@ -7,7 +7,7 @@ const { WalletNotFoundError } = require('@/errors/common');
 const { autoSellToken } = require('@/events/token.event');
 const { getTokenAccountsByOwner } = require('@/features/token.feature');
 const { getBalance } = require('@/services/solana');
-const { clearAllInterval, setIntervalID } = require('@/store');
+const { clearAllInterval, getIntervalID, setIntervalID } = require('@/store');
 const { welcomeMsg, positionsMsg } = require('./messages');
 const { startKeyboard } = require('./keyboards');
 
@@ -23,15 +23,18 @@ const start = async (bot, msg, params) => {
     await startInterval(bot, msg, { ...params, refresh: true });
   }, TimeInterval)
 
-  const autoSellId = setInterval(async () => {
-    await autoSellToken(bot, msg);
-  }, TimeInterval)
+  let { autoSell } = getIntervalID();
+  if (!autoSell) {
+    autoSell = setInterval(async () => {
+      await autoSellToken(bot, msg);
+    }, TimeInterval)
+  }
 
   setIntervalID({
     start: startId,
     managePostition: null,
     token: null,
-    autoSell: autoSellId,
+    autoSell: autoSell,
   })
 };
 

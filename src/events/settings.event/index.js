@@ -4,6 +4,8 @@ const {
   updateSettings,
 } = require('@/controllers/settings.controller');
 const { createStrategy, updateStrategy } = require('@/controllers/strategy.controller');
+const { autoSellToken } = require('@/events/token.event');
+const { getIntervalID, setIntervalID } = require('@/store');
 const {
   settingsMsg,
   replyMinPosValueMsg,
@@ -72,7 +74,7 @@ const toggleSetting = async (bot, msg, params) => {
         inline_keyboard: settingsKeyboard(settings),
       },
     })
-    .then(() => {
+    .then(async () => {
       switch (name) {
         case 'autoBuy':
           bot.sendMessage(chatId, autoBuyMsg(settings.autoBuy));
@@ -83,6 +85,24 @@ const toggleSetting = async (bot, msg, params) => {
         case 'gasFee':
           bot.sendMessage(chatId, gasFeeMsg(settings.gasFee));
           break;
+      }
+
+      if (settings.autoSell) {
+        await autoSellToken(bot, msg);
+
+        let { autoSell } = getIntervalID();
+        if (!autoSell) {
+          autoSell = setInterval(async () => {
+            await autoSellToken(bot, msg);
+          }, TimeInterval)
+        }
+
+        setIntervalID({
+          start: startId,
+          managePostition: null,
+          token: null,
+          autoSell: autoSell,
+        })
       }
     })
     .catch(() => { });
@@ -216,7 +236,7 @@ const editSetting = async (bot, msg, params) => {
 
 const addStrategy = async (bot, msg) => {
   const chatId = msg.chat.id;
-  
+
   bot
     .sendMessage(chatId, replyOrderMsg(), {
       reply_markup: {
@@ -226,7 +246,7 @@ const addStrategy = async (bot, msg) => {
     .then(({ message_id }) => {
       bot.onReplyToMessage(chatId, message_id, async (reply) => {
         const text = reply.text.split(' ');
-        
+
         const percent = parseInt(text[0]);
         const amount = parseInt(text[1]);
         if (text.length < 2) {
