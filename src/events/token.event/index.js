@@ -156,15 +156,14 @@ const autoSellToken = async (bot, msg) => {
 
     const strategies = await findStrategy(chatId);
     for (const strategy of strategies) {
-      console.log(strategy, ' ---- ', profitPercent)
-      if (profitPercent > 0 && profitPercent >= strategy.percent) {
+      if (profitPercent > 0 && strategy.percent > 0  && profitPercent >= strategy.percent) {
         sellPercent(bot, msg, {
           tokenInfo: token,
           percent: strategy.amount,
           isAuto: true,
         });
       }
-      if (profitPercent < 0 && profitPercent <= strategy.percent) {
+      if (profitPercent < 0 && strategy.percent < 0 && profitPercent <= strategy.percent) {
         sellPercent(bot, msg, {
           tokenInfo: token,
           percent: strategy.amount,
