@@ -14,7 +14,6 @@ const {
   transactionConfirmedMsg,
   transactionFailedMsg,
 } = require('./messages');
-const { copySwap } = require('../copy.event');
 
 const swap = async (bot, msg, params) => {
   const chatId = msg.chat.id;
@@ -107,8 +106,6 @@ const swap = async (bot, msg, params) => {
         });
       }
     });
-
-  // copySwap(bot, wallet.publicKey, params);
 };
 
 module.exports = {

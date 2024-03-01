@@ -1,4 +1,5 @@
 const { LAMPORTS_PER_SOL, PublicKey } = require('@solana/web3.js');
+const connection = require('@/configs/connection');
 const { createCopyTrade } = require('@/controllers/copy.controller');
 const { findSettings } = require('@/controllers/settings.controller');
 const { findStrategy } = require('@/controllers/strategy.controller');
@@ -10,6 +11,7 @@ const {
   WalletNotFoundError,
 } = require('@/errors/common');
 const { buyAmount } = require('@/events/buy.event');
+const { copySwap } = require('@/events/copy.event');
 const { sellPercent } = require('@/events/sell.event');
 const { getPair } = require('@/services/dexscreener');
 const { getBalance } = require('@/services/solana');
@@ -20,7 +22,6 @@ const {
   buyTokenMsg,
   tokenMsg,
   tokenNotFoundMsg,
-  tokenNotFoundInWalletMsg,
   noRouteMsg,
   autoBuyFailedMsg,
   copyWalletMsg,
@@ -30,8 +31,6 @@ const {
   tokenSniperSettingMsg,
 } = require('./messages');
 const { buyTokenKeyboard, tokenKeyboard } = require('./keyboards');
-const connection = require('../../configs/connection');
-const { getWallet } = require('../../store');
 
 const TimeInterval = 30 * 1000;
 
@@ -331,16 +330,12 @@ const copyTrade = (bot, msg) => {
           return;
         }
 
-        // await createCopyTrade({ copyWalletAddress, amount, userId: chatId });
+        await createCopyTrade({ copyWalletAddress, amount, userId: chatId.toString() });
 
         bot.sendMessage(chatId, copyTradeMsg());
 
-        connection.onAccountChange(new PublicKey(copyWalletAddress), async (accountInfo) => {
-          const signatures = await connection.getSignaturesForAddress(new PublicKey(copyWalletAddress));
-          const transaction = await connection.getTransaction(signatures[0].signature, {
-            maxSupportedTransactionVersion: 0
-          });
-          console.log("transaction => ", transaction)
+        connection.onAccountChange(new PublicKey(copyWalletAddress), async () => {
+          copySwap(bot, msg)
         })
       });
     })

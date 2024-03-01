@@ -1,21 +1,37 @@
 const { prisma } = require('../configs/database');
 
 const findCopyTrade = async (address) => {
-  const copyTrades = await prisma.copyTrade.findAll({
+  const copyTrades = await prisma.copyTrade.findMany({
     where: {
       copyWalletAddress: address.toString(),
     },
-    raw: true,
   })
   return copyTrades
 };
 
 const createCopyTrade = async (params) => {
   try {
+    const copyTrades = await prisma.copyTrade.findMany({
+      where: {
+        userId: params.userId,
+      },
+    })
+    if (copyTrades.length > 0) {
+      copyTrades.map(async (item) => {
+        if (item.copyWalletAddress === params.copyWalletAddress)
+          await prisma.copyTrade.delete({
+            where: {
+              id: item.id,
+            },
+          })
+      })
+    }
+    
     await prisma.copyTrade.create({
       data: params
     });
-  } catch (e) {
+  } catch (error) {
+    console.log(error.message)
     return null;
   }
 };
