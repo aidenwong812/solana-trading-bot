@@ -17,25 +17,25 @@ const start = async (bot, msg, params) => {
   await startInterval(bot, msg, params);
   await autoSellToken(bot, msg);
 
-  clearAllInterval();
+  // clearAllInterval();
 
-  const startId = setInterval(async () => {
-    await startInterval(bot, msg, { ...params, refresh: true });
-  }, TimeInterval)
+  // const startId = setInterval(async () => {
+  //   await startInterval(bot, msg, { ...params, refresh: true });
+  // }, TimeInterval)
 
-  let { autoSell } = getIntervalID();
-  if (!autoSell) {
-    autoSell = setInterval(async () => {
-      await autoSellToken(bot, msg);
-    }, TimeInterval)
-  }
+  // let { autoSell } = getIntervalID();
+  // if (!autoSell) {
+  //   autoSell = setInterval(async () => {
+  //     await autoSellToken(bot, msg);
+  //   }, TimeInterval)
+  // }
 
-  setIntervalID({
-    start: startId,
-    managePostition: null,
-    token: null,
-    autoSell: autoSell,
-  })
+  // setIntervalID({
+  //   start: startId,
+  //   managePostition: null,
+  //   token: null,
+  //   autoSell: autoSell,
+  // })
 };
 
 const startInterval = async (bot, msg, params) => {

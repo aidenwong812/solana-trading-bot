@@ -81,6 +81,10 @@ const copyTradeMsg = () => `
   Copy trade created successfully. Your funds will now track the selected wallet.
 `;
 
+const tokenSniperSettingMsg = () => `
+  To sniper a token, enter a token address or name.
+`;
+
 module.exports = {
   buyTokenMsg: () => trim(buyTokenMsg()),
   tokenMsg: (params) => trim(tokenMsg(params)),
@@ -92,4 +96,5 @@ module.exports = {
   invalidInputMsg: () => trim(invalidInputMsg()),
   invalidWalletAddressMsg: () => trim(invalidWalletAddressMsg()),
   copyTradeMsg: () => trim(copyTradeMsg()),
+  tokenSniperSettingMsg: () => trim(tokenSniperSettingMsg()),
 };

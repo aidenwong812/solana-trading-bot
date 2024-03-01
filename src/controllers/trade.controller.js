@@ -1,19 +1,26 @@
-const { Op } = require('sequelize');
-const Trade = require('@/models/trade.model');
+const { prisma } = require('../configs/database');
 
 const createTrade = async (params) => {
-  const trade = await Trade.create(params);
+  const trade = await prisma.trade.create({
+    data: params,
+  });
   return trade;
 };
 
 const getTradesData = async (userId, mintAddress) => {
-  const trades = await Trade.findAll({
+  const trades = await prisma.trade.findMany({
     where: {
       userId: userId.toString(),
-      [Op.or]: [{ inputMint: mintAddress }, { outputMint: mintAddress }],
+      OR: [
+        { inputMint: mintAddress },
+        { outputMint: mintAddress }
+      ],
     },
-    attributes: ['inputMint', 'inAmount', 'outAmount'],
-    raw: true,
+    select: {
+      inputMint: true,
+      inAmount: true,
+      outAmount: true,
+    },
   });
 
   let baseAmount = 0;

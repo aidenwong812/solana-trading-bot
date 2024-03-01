@@ -7,7 +7,6 @@ const { findWallet } = require('@/controllers/wallet.controller');
 const { showPositionAfterTrade } = require('@/events/manage.event');
 const { coverFee } = require('@/features/fee.feature');
 const { initiateSwap, swapToken } = require('@/features/swap.feature');
-const Wallet = require('@/models/wallet.model');
 const { confirmTransaction } = require('@/services/solana');
 const {
   transactionInitiateMsg,

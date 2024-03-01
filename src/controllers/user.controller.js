@@ -1,27 +1,30 @@
-const { Sequelize } = require('sequelize');
-const User = require('@/models/user.model');
+const { prisma } = require('../configs/database');
 const store = require('@/store');
 const { decrypt } = require('@/utils');
 
 const findAllUsers = async () => {
-  const users = await User.findAll({ raw: true });
+  const users = await prisma.user.findMany();
   return users;
 };
 
-const createUser = async (id, code = null) => {
+const createUser = async (id, username, code = null) => {
   try {
     const referrerId = code && decrypt(code);
 
-    const user = await User.create({
-      id,
-      referrerId,
+    const userController = await prisma.user.create({
+      data: {
+        id: id.toString(),
+        username,
+        referrerId,
+      },
     });
 
-    store.setUser(user);
-    store.setReferrer(user);
+    store.setUser(userController);
+    store.setReferrer(userController);
 
-    return user;
-  } catch {
+    return userController;
+  } catch(error) {
+    console.error(error.message)
     return null;
   }
 };
@@ -31,10 +34,8 @@ const findUser = (id) => {
 };
 
 const findRandomUser = async () => {
-  const user = await User.findOne({
-    order: Sequelize.literal('random()'),
-    limit: 1,
-    raw: true,
+  const user = await prisma.user.findFirst({
+    orderBy: { random: 'asc' },
   });
   return user;
 };
@@ -44,8 +45,12 @@ const findReferrer = (id) => {
 };
 
 const getNumberOfReferrals = async (id) => {
-  const users = await User.findAll({ where: { referrerId: id.toString() } });
-  return users.length;
+  const count = await prisma.user.count({
+    where: {
+      referrerId: id.toString(),
+    },
+  });
+  return count;
 };
 
 module.exports = {

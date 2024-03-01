@@ -1,29 +1,35 @@
-const Strategy = require('@/models/strategy.model');
+const { prisma } = require('../configs/database');
 
 const findStrategy = async (id) => {
-  const strategies = await Strategy.findAll({
+  const strategies = await prisma.strategy.findMany({
     where: {
       userId: id.toString(),
     },
-    attributes: ['id', 'percent', 'amount'],
-    raw: true,
-  })
-  return strategies
+    select: {
+      id: true,
+      percent: true,
+      amount: true,
+    },
+  });
+  return strategies;
 };
 
 const createStrategy = async (params) => {
   try {
-    await Strategy.create(params);
+    await prisma.strategy.create({
+      data: params,
+    });
   } catch {
     return null;
   }
 };
 
 const updateStrategy = async (id, params) => {
-  await Strategy.update(params, {
+  await prisma.strategy.updateMany({
     where: {
-      id,
+      id: id,
     },
+    data: params,
   });
   const strategies = await findStrategy(id);
   return strategies;

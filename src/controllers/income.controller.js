@@ -1,28 +1,27 @@
-const Income = require('@/models/income.model');
-const store = require('@/store');
+const { prisma } = require('../configs/database');
 
 const findAllIncomes = async () => {
-  const incomes = await Income.findAll({ raw: true });
+  const incomes = await prisma.income.findMany();
   return incomes;
 };
 
 const createIncome = async ({ userId, senderId, referral, lucky }) => {
-  const income = await Income.create({
-    userId,
-    senderId,
-    referral,
-    lucky,
+  const income = await prisma.income.create({
+    data: {
+      userId,
+      senderId,
+      referral,
+      lucky,
+    },
   });
-
   return income;
 };
 
 const getLifeTimeIncome = async (id) => {
-  const incomes = await Income.findAll({
+  const incomes = await prisma.income.findMany({
     where: {
       userId: id.toString(),
     },
-    raw: true,
   });
 
   return incomes.reduce(

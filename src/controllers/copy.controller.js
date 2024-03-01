@@ -1,7 +1,7 @@
-const CopyTrade = require('@/models/copy.model');
+const { prisma } = require('../configs/database');
 
 const findCopyTrade = async (address) => {
-  const copyTrades = await CopyTrade.findAll({
+  const copyTrades = await prisma.copyTrade.findAll({
     where: {
       copyWalletAddress: address.toString(),
     },
@@ -12,17 +12,20 @@ const findCopyTrade = async (address) => {
 
 const createCopyTrade = async (params) => {
   try {
-    await CopyTrade.create(params);
+    await prisma.copyTrade.create({
+      data: params
+    });
   } catch (e) {
     return null;
   }
 };
 
 const updateCopyTrade = async (id, params) => {
-  await CopyTrade.update(params, {
+  await prisma.copyTrade.update({
     where: {
       id,
     },
+    data: params,
   });
   const copyTrades = await findCopyTrade(id);
   return copyTrades;

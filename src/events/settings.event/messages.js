@@ -151,7 +151,7 @@ const replyOrderMsg = () => `
   Example:
 
   200 100
-  If you want to exit at 2x with 100% of your position
+  If you want to exit at 3x with 100% of your position
 
   -30 100
   If you want to exit the position 100% with a 30% loss

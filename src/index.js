@@ -13,3 +13,5 @@ const { initStore } = require('@/store/utils');
 
   router(bot);
 })();
+
+console.log("\n Sniper bot is running... \n");

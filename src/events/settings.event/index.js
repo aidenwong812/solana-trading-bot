@@ -90,19 +90,19 @@ const toggleSetting = async (bot, msg, params) => {
       if (settings.autoSell) {
         await autoSellToken(bot, msg);
 
-        let { autoSell } = getIntervalID();
-        if (!autoSell) {
-          autoSell = setInterval(async () => {
-            await autoSellToken(bot, msg);
-          }, TimeInterval)
-        }
+        // let { autoSell } = getIntervalID();
+        // if (!autoSell) {
+        //   autoSell = setInterval(async () => {
+        //     await autoSellToken(bot, msg);
+        //   }, TimeInterval)
+        // }
 
-        setIntervalID({
-          start: startId,
-          managePostition: null,
-          token: null,
-          autoSell: autoSell,
-        })
+        // setIntervalID({
+        //   start: startId,
+        //   managePostition: null,
+        //   token: null,
+        //   autoSell: autoSell,
+        // })
       }
     })
     .catch(() => { });

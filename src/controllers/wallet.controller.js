@@ -1,10 +1,10 @@
+const { prisma } = require('../configs/database');
 const bs58 = require('bs58');
-const Wallet = require('@/models/wallet.model');
 const store = require('@/store');
 const { Keypair } = require('@solana/web3.js');
 
 const findAllWallets = async () => {
-  const wallets = await Wallet.findAll({ raw: true });
+  const wallets = await prisma.wallet.findMany();
   return wallets;
 };
 
@@ -13,16 +13,19 @@ const createWallet = async (id) => {
     const keypair = Keypair.generate();
     const publicKey = keypair.publicKey.toBase58();
     const secretKey = bs58.encode(keypair.secretKey);
-    const wallet = await Wallet.create({
-      id,
-      publicKey,
-      secretKey,
+    const wallet = await prisma.wallet.create({
+      data: {
+        id: id.toString(),
+        publicKey,
+        secretKey,
+      },
     });
 
     store.setWallet(wallet);
 
     return wallet;
-  } catch {
+  } catch(error) {
+    console.error(error.message)
     return null;
   }
 };
@@ -33,23 +36,18 @@ const findWallet = (id) => {
 
 const updateWallet = async (id) => {
   const keypair = Keypair.generate();
-  const wallet = {
-    id,
-    publicKey: keypair.publicKey.toBase58(),
-    secretKey: bs58.encode(keypair.secretKey),
-  };
+  const publicKey = keypair.publicKey.toBase58();
+  const secretKey = bs58.encode(keypair.secretKey);
 
-  await Wallet.update(
-    {
-      publicKey: wallet.publicKey,
-      secretKey: wallet.secretKey,
+  const wallet = await prisma.wallet.update({
+    where: {
+      id: id.toString(),
     },
-    {
-      where: {
-        id: wallet.id,
-      },
-    }
-  );
+    data: {
+      publicKey,
+      secretKey,
+    },
+  });
 
   store.setWallet(wallet);
 

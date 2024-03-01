@@ -1,4 +1,4 @@
-const { LAMPORTS_PER_SOL } = require('@solana/web3.js');
+const { LAMPORTS_PER_SOL, PublicKey } = require('@solana/web3.js');
 const { createCopyTrade } = require('@/controllers/copy.controller');
 const { findSettings } = require('@/controllers/settings.controller');
 const { findStrategy } = require('@/controllers/strategy.controller');
@@ -16,7 +16,6 @@ const { getBalance } = require('@/services/solana');
 const { getTokenMetadata } = require('@/services/metaplex');
 const { getTokenAccountsByOwner } = require('@/features/token.feature');
 const { clearAllInterval, setIntervalID } = require('@/store');
-const Wallet = require('@/models/wallet.model');
 const {
   buyTokenMsg,
   tokenMsg,
@@ -28,8 +27,11 @@ const {
   invalidInputMsg,
   invalidWalletAddressMsg,
   copyTradeMsg,
+  tokenSniperSettingMsg,
 } = require('./messages');
 const { buyTokenKeyboard, tokenKeyboard } = require('./keyboards');
+const connection = require('../../configs/connection');
+const { getWallet } = require('../../store');
 
 const TimeInterval = 30 * 1000;
 
@@ -156,7 +158,7 @@ const autoSellToken = async (bot, msg) => {
 
     const strategies = await findStrategy(chatId);
     for (const strategy of strategies) {
-      if (profitPercent > 0 && strategy.percent > 0  && profitPercent >= strategy.percent) {
+      if (profitPercent > 0 && strategy.percent > 0 && profitPercent >= strategy.percent) {
         sellPercent(bot, msg, {
           tokenInfo: token,
           percent: strategy.amount,
@@ -177,17 +179,17 @@ const autoSellToken = async (bot, msg) => {
 const showToken = async (bot, msg, params) => {
   await showTokenInterval(bot, msg, params);
 
-  clearAllInterval();
+  // clearAllInterval();
 
-  const id = setInterval(async () => {
-    await showTokenInterval(bot, msg, { ...params, refresh: true });
-  }, TimeInterval)
+  // const id = setInterval(async () => {
+  //   await showTokenInterval(bot, msg, { ...params, refresh: true });
+  // }, TimeInterval)
 
-  setIntervalID({
-    start: null,
-    managePostition: null,
-    token: id,
-  })
+  // setIntervalID({
+  //   start: null,
+  //   managePostition: null,
+  //   token: id,
+  // })
 };
 
 const showTokenInterval = async (bot, msg, params) => {
@@ -309,29 +311,65 @@ const copyTrade = (bot, msg) => {
         const text = reply.text.split(' ');
         const copyWalletAddress = text[0];
         const amount = parseFloat(text[1]);
-        const wallets = await Wallet.findAll({
-          where: {
-            publicKey: copyWalletAddress,
-          },
-          raw: true,
-        })
 
-        if (text.length < 2) {
-          bot.sendMessage(chatId, invalidInputMsg());
-          return;
-        }
-        if (amount < 0) {
-          bot.sendMessage(chatId, invalidInputMsg());
-          return;
-        }
-        if (wallets.length === 0) {
+        const isAddressValidated = PublicKey.isOnCurve(new PublicKey(copyWalletAddress))
+
+        if (!isAddressValidated) {
           bot.sendMessage(chatId, invalidWalletAddressMsg());
           return;
         }
+        if (text.length < 2) {
+          bot.sendMessage(chatId, invalidInputMsg(), {
+            parse_mode: 'HTML'
+          });
+          return;
+        }
+        if (amount < 0) {
+          bot.sendMessage(chatId, invalidInputMsg(), {
+            parse_mode: 'HTML'
+          });
+          return;
+        }
 
-        await createCopyTrade({ copyWalletAddress, amount, userId: chatId });
+        // await createCopyTrade({ copyWalletAddress, amount, userId: chatId });
 
         bot.sendMessage(chatId, copyTradeMsg());
+
+        connection.onAccountChange(new PublicKey(copyWalletAddress), async (accountInfo) => {
+          const signatures = await connection.getSignaturesForAddress(new PublicKey(copyWalletAddress));
+          const transaction = await connection.getTransaction(signatures[0].signature, {
+            maxSupportedTransactionVersion: 0
+          });
+          console.log("transaction => ", transaction)
+        })
+      });
+    })
+}
+
+const tokenSniper = (bot, msg) => {
+  const chatId = msg.chat.id;
+  let metadata;
+
+  bot
+    .sendMessage(chatId, tokenSniperSettingMsg(), {
+      parse_mode: 'HTML',
+      reply_markup: {
+        force_reply: true,
+      },
+    })
+    .then(({ message_id }) => {
+      bot.onReplyToMessage(chatId, message_id, async (reply) => {
+        const sniperTokenMint = reply.text;
+
+        try {
+          metadata = await getTokenMetadata(sniperTokenMint);
+        } catch (e) {
+          console.error(e);
+          bot.sendMessage(chatId, tokenNotFoundMsg(sniperTokenMint), {
+            parse_mode: 'HTML',
+          });
+          return;
+        }
       });
     })
 }
@@ -343,4 +381,5 @@ module.exports = {
   autoBuyToken,
   autoSellToken,
   copyTrade,
+  tokenSniper,
 };
