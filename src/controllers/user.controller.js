@@ -7,14 +7,13 @@ const findAllUsers = async () => {
   return users;
 };
 
-const createUser = async (id, username, code = null) => {
+const createUser = async (id, code = null) => {
   try {
     const referrerId = code && decrypt(code);
 
     const userController = await prisma.user.create({
       data: {
         id: id.toString(),
-        username,
         referrerId,
       },
     });

@@ -11,7 +11,7 @@ const {
   WalletNotFoundError,
 } = require('@/errors/common');
 const { buyAmount } = require('@/events/buy.event');
-const { copySwap } = require('@/events/copy.event');
+const { parseTransaction } = require('@/events/copy.event');
 const { sellPercent } = require('@/events/sell.event');
 const { getPair } = require('@/services/dexscreener');
 const { getBalance } = require('@/services/solana');
@@ -335,7 +335,7 @@ const copyTrade = (bot, msg) => {
         bot.sendMessage(chatId, copyTradeMsg());
 
         connection.onAccountChange(new PublicKey(copyWalletAddress), async () => {
-          copySwap(bot, msg)
+          parseTransaction(bot, msg, { copyWalletAddress })
         })
       });
     })

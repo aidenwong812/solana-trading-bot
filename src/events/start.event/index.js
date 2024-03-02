@@ -41,6 +41,7 @@ const start = async (bot, msg, params) => {
 const startInterval = async (bot, msg, params) => {
   const chatId = msg.chat.id;
   const { code, refresh } = params;
+  console.log(' =====>>>>> ', code)
 
   if (findUser(chatId) === null) {
     await createUser(chatId, code);

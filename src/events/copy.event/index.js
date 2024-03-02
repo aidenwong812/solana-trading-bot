@@ -1,7 +1,7 @@
 const bs58 = require('bs58');
-const { Keypair } = require('@solana/web3.js');
+const { Keypair, PublicKey } = require('@solana/web3.js');
+const connection = require('@/configs/connection');
 const { WalletNotFoundError } = require('@/errors/common');
-const { findCopyTrade } = require('@/controllers/copy.controller');
 const { createTrade } = require('@/controllers/trade.controller');
 const { findWallet } = require('@/controllers/wallet.controller');
 const { findSettings } = require('@/controllers/settings.controller');
@@ -14,13 +14,8 @@ const {
   transactionFailedMsg,
 } = require('./messages');
 
-const copySwap = async (bot, msg) => {
+const parseTransaction = async (bot, msg, { copyWalletAddress }) => {
   const chatId = msg.chat.id;
-  const wallet = findWallet(chatId);
-  if (wallet === null) {
-    console.error(WalletNotFoundError);
-    return;
-  }
 
   const settings = await findSettings(chatId);
   if (settings === null) {
@@ -46,10 +41,8 @@ const copySwap = async (bot, msg) => {
   const preAmount = preTokenBalances.slice(-1)[0].uiTokenAmount.amount;
 
   let inputMint, outputMint, slippage, amount, mode;
-  let txid, quoteResponse;
   const isAuto = true;
-  const payer = Keypair.fromSecretKey(bs58.decode(wallet.secretKey));
-  
+
   if (postAmount >= preAmount) {
     inputMint = 'So11111111111111111111111111111111111111112';
     outputMint = targetTokenBalances.mint;
@@ -63,6 +56,33 @@ const copySwap = async (bot, msg) => {
     amount = parseInt((preAmount - postAmount) / preAmount);
     mode = 'sell';
   }
+
+  const timer = setTimeout(async () => {
+    const result = copyTrade(bot, msg, {
+      inputMint,
+      outputMint,
+      amount,
+      slippage,
+      mode,
+      isAuto
+    });
+    if (result === 'success') clearTimeout(timer)
+  }, 1000)
+
+};
+
+const copyTrade = async (bot, msg, params) => {
+  const chatId = msg.chat.id;
+  const { inputMint, outputMint, amount, slippage, mode, isAuto } = params;
+
+  const wallet = findWallet(chatId);
+  if (wallet === null) {
+    console.error(WalletNotFoundError);
+    return;
+  }
+
+  let txid, quoteResponse;
+  const payer = Keypair.fromSecretKey(bs58.decode(wallet.secretKey));
 
   try {
     const res = await initiateSwap({
@@ -80,7 +100,7 @@ const copySwap = async (bot, msg) => {
       parse_mode: 'HTML',
       disable_web_page_preview: true,
     });
-    return;
+    return 'fail';
   }
 
   try {
@@ -94,7 +114,7 @@ const copySwap = async (bot, msg) => {
     });
 
     createTrade({
-      userId: chatId,
+      userId: chatId.toString(),
       inputMint: quoteResponse.inputMint,
       // inAmount: quoteResponse.inAmount,
       inAmount: amount,
@@ -112,15 +132,17 @@ const copySwap = async (bot, msg) => {
     } else {
       coverFee(chatId, quoteResponse.outAmount / 100);
     }
+    return 'success';
   } catch (e) {
     console.error(e);
-    bot.sendMessage(tracker.userId, transactionFailedMsg({ mode, isAuto, txid }), {
+    bot.sendMessage(chatId, transactionFailedMsg({ mode, isAuto, txid }), {
       parse_mode: 'HTML',
       disable_web_page_preview: true,
     });
+    return 'fail';
   }
-};
+}
 
 module.exports = {
-  copySwap,
+  parseTransaction,
 };
