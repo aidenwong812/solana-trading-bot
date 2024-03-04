@@ -15,11 +15,11 @@ const settingsKeyboard = ({
 }) => {
   strategiesKeyboard = strategies.map(strategy => [
     {
-      text: `✎ ${strategy.percent < 0 ? 'S/L' : 'T/P'}: ${strategy.percent} %`,
+      text: `✏️ ${strategy.percent < 0 ? 'S/L' : 'T/P'}: ${strategy.percent} %`,
       callback_data: `editStrategy percent ${strategy.id}`,
     },
     {
-      text: `✎ Amount: ${strategy.amount} %`,
+      text: `✏️ Amount: ${strategy.amount} %`,
       callback_data: `editStrategy amount ${strategy.id}`,
     },
   ]);
@@ -52,7 +52,7 @@ const settingsKeyboard = ({
           callback_data: `toggleSetting autoBuy ${autoBuy ? 0 : 1}`,
         },
         {
-          text: `✎ ${autoBuyAmount} SOL`,
+          text: `✏️ ${autoBuyAmount} SOL`,
           callback_data: 'editSetting autoBuyAmount',
         },
       ],
@@ -85,11 +85,11 @@ const settingsKeyboard = ({
       ],
       [
         {
-          text: `✎ Left: ${leftBuyAmount} SOL`,
+          text: `✏️ Left: ${leftBuyAmount} SOL`,
           callback_data: 'editSetting leftBuyAmount',
         },
         {
-          text: `✎ Right: ${rightBuyAmount} SOL`,
+          text: `✏️ Right: ${rightBuyAmount} SOL`,
           callback_data: 'editSetting rightBuyAmount',
         },
       ],
@@ -101,11 +101,11 @@ const settingsKeyboard = ({
       ],
       [
         {
-          text: `✎ Left: ${leftSellAmount}%`,
+          text: `✏️ Left: ${leftSellAmount}%`,
           callback_data: 'editSetting leftSellAmount',
         },
         {
-          text: `✎ Right: ${rightSellAmount}%`,
+          text: `✏️ Right: ${rightSellAmount}%`,
           callback_data: 'editSetting rightSellAmount',
         },
       ],
@@ -117,21 +117,21 @@ const settingsKeyboard = ({
       ],
       [
         {
-          text: `✎ Buy: ${buySlippage}%`,
+          text: `✏️ Buy: ${buySlippage}%`,
           callback_data: 'editSetting buySlippage',
         },
         {
-          text: `✎ Sell: ${sellSlippage}%`,
+          text: `✏️ Sell: ${sellSlippage}%`,
           callback_data: 'editSetting sellSlippage',
         },
       ],
       [
         {
-          text: `✎ Auto Buy: ${autoBuySlippage}%`,
+          text: `✏️ Auto Buy: ${autoBuySlippage}%`,
           callback_data: 'editSetting autoBuySlippage',
         },
         {
-          text: `✎ Auto Sell: ${autoSellSlippage}%`,
+          text: `✏️ Auto Sell: ${autoSellSlippage}%`,
           callback_data: 'editSetting autoSellSlippage',
         },
       ],

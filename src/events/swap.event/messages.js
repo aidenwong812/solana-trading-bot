@@ -3,24 +3,24 @@ const { trim } = require('@/utils');
 const autoBuyMessage = ``;
 
 const transactionInitiateMsg = (mode) => `
-  Initiating ${mode}...
+  ⏳ Initiating ${mode}...
 `;
 
 const transactionBuildFailedMsg = () => `
-  Building transaction failed, please try again.
+  ⛔ Building transaction failed, please try again.
 `;
 
 const transactionSentMsg = () => `
-  Transaction sent. Waiting for confirmation...
+  ➡ Transaction sent. Waiting for confirmation...
 `;
 
 const transactionConfirmedMsg = (txid) => `
-  Swap Successful
+  ✅ Swap Successful
   https://solscan.io/tx/${txid}
 `;
 
 const transactionFailedMsg = (txid) => `
-  Swap failed
+  📛 Swap failed
   https://solscan.io/tx/${txid}
 `;
 
@@ -28,13 +28,13 @@ const wrapAutoBuy = (msg, mode, isAuto) => {
   if (mode === 'buy' && isAuto) {
     return `
       ${msg}
-      <i>This trade was triggered with Auto Buy enabled. To enable confirmations or change the buy amount go to Settings (press /settings).</i>
+      🚨 <i>This trade was triggered with Auto Buy enabled. To enable confirmations or change the buy amount go to Settings (press /settings).</i>
     `;
   }
   if (mode === 'sell' && isAuto) {
     return `
       ${msg}
-      <i>This trade was triggered with Auto Sell enabled. To enable confirmations or change the sell percent go to Settings (press /settings).</i>
+      🚨 <i>This trade was triggered with Auto Sell enabled. To enable confirmations or change the sell percent go to Settings (press /settings).</i>
     `;
   }
   return msg;

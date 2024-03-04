@@ -1,7 +1,7 @@
 const { trim } = require('@/utils');
 
 const settingsMsg = () => `
-  <b>Settings:</b>
+  <b>⚙️ Settings:</b>
 
   <b>TRANSACTION PRIORITY</b>
   🚀 Fast/Turbo/Custom Fee: Set your preferred priority fee to decrease likelihood of failed transactions.
@@ -38,115 +38,115 @@ const settingsMsg = () => `
 `;
 
 const replyMinPosValueMsg = () => `
-  Reply with your new minimum $ value for positions to be displayed. Example: 0.01
+  ↪️ Reply with your new minimum $ value for positions to be displayed. Example: 0.01
 `;
 
 const minPosValueMsg = (minPosValue) => `
-  Minimum Position Value set to $${minPosValue}.
+  🔽💵 Minimum Position Value set to $${minPosValue}.
 `;
 
 const autoBuyMsg = (value) => `
-Auto Buy ${value ? '🟢 enabled' : '🔴 disabled'}.
+  Auto Buy ${value ? '🟢 enabled' : '🔴 disabled'}.
 `;
 
 const autoSellMsg = (value) => `
-Auto Sell ${value ? '🟢 enabled' : '🔴 disabled'}.
+  Auto Sell ${value ? '🟢 enabled' : '🔴 disabled'}.
 `;
 
 const replyAutoBuyAmountMsg = () => `
-  Reply with your new Auto Buy Amount in SOL. Example: 0.5
+  ↪️💲 Reply with your new Auto Buy Amount in SOL. <i>Example: 0.5</i>
 `;
 
 const autoBuyAmountMsg = (value) => `
-  Auto Buy Amount set to ${value} SOL.
+  🤖💲 Auto Buy Amount set to ${value} SOL.
 `;
 
 const replyLeftBuyAmountMsg = () => `
-  Reply with your new setting for the left Buy Button in SOL. Example: 0.5
+  ↪️ Reply with your new setting for the left Buy Button in SOL. Example: 0.5
 `;
 
 const leftBuyAmountMsg = (value) => `
-  Left Buy Button set to ${value} SOL.
+  🟢💰 Left Buy Button set to ${value} SOL.
 `;
 
 const replyRightBuyAmountMsg = () => `
-  Reply with your new setting for the right Buy Button in SOL. Example: 1.5
+  ↪️ Reply with your new setting for the right Buy Button in SOL. Example: 1.5
 `;
 
 const rightBuyAmountMsg = (value) => `
-  Right Buy Button set to ${value} SOL.
+  🟢💰 Right Buy Button set to ${value} SOL.
 `;
 
 const replyLeftSellAmountMsg = () => `
-  Reply with your new setting for the left Sell Button in % (0 - 100%). Example: 25
+  ↪️ Reply with your new setting for the left Sell Button in % (0 - 100%). Example: 25
 `;
 
 const leftSellAmountMsg = (value) => `
-  Left Sell Button set to ${value}%.
+  🔻💰 Left Sell Button set to ${value}%.
 `;
 
 const replyRightSellAmountMsg = () => `
-  Reply with your new setting for the right Sell Button in % (0 - 100%). Example: 25
+  ↪️ Reply with your new setting for the right Sell Button in % (0 - 100%). Example: 25
 `;
 
 const rightSellAmountMsg = (value) => `
-  Right Sell Button set to ${value}%.
+  🔻💰 Right Sell Button set to ${value}%.
 `;
 
 const replyBuySlippageMsg = () => `
-  Reply with your new slippage setting for buys in % (0.00 - 50.00%). Example: 5.5
+  ↪️ Reply with your new slippage setting for buys in % (0.00 - 50.00%). Example: 5.5
 `;
 
 const buySlippageMsg = (value) => `
-  Buy Slippage set to ${value}%.
+  🟢💧 Buy Slippage set to ${value}%.
 `;
 
 const replySellSlippageMsg = () => `
-  Reply with your new slippage setting for sells in % (0.00 - 50.00%). Example: 5.5
+  ↪️ Reply with your new slippage setting for sells in % (0.00 - 50.00%). Example: 5.5
 `;
 
 const sellSlippageMsg = (value) => `
-  Sell Slippage set to ${value}%.
+  🟢💧 Sell Slippage set to ${value}%.
 `;
 
 const replyAutoBuySlippageMsg = () => `
-  Reply with your new slippage setting for auto buys in % (0.00 - 50.00%). Example: 5.5
+  ↪️ Reply with your new slippage setting for auto buys in % (0.00 - 50.00%). Example: 5.5
 `;
 
 const autoBuySlippageMsg = (value) => `
-  Auto Buy Slippage set to ${value}%.
+  🤖 Auto Buy Slippage set to ${value}%.
 `;
 
 const replyAutoSellSlippageMsg = () => `
-  Reply with your new slippage setting for auto sells in % (0.00 - 50.00%). Example: 5.5
+  ↪️ Reply with your new slippage setting for auto sells in % (0.00 - 50.00%). Example: 5.5
 `;
 
 const autoSellSlippageMsg = (value) => `
-  Auto Sell Slippage set to ${value}%.
+  🤖 Auto Sell Slippage set to ${value}%.
 `;
 
 const replyGasFeeMsg = () => `
-  Reply with your new gas fee setting in SOL. Example: 0.0005
+  ↪️ Reply with your new gas fee setting in SOL. Example: 0.0005
 `;
 
 const replyStrategyPercentMsg = () => `
-  Reply with your new T/P(S/L) setting in %. Example: 50(-25)
+  ↪️ Reply with your new T/P(S/L) setting in %. Example: 50(-25)
 `;
 
 const strategyPercentMsg = (value) => `
-  T/P(S/L) set to ${value}%.
+  🚦 T/P(S/L) set to ${value}%.
 `;
 
 const replyStrategyAmountMsg = () => `
-  Reply with your new sell amount setting in % (0 - 100%). Example: 50
+  ↪️ Reply with your new sell amount setting in % (0 - 100%). Example: 50
 `;
 
 const strategyAmountMsg = (value) => `
-  Sell Amount set to ${value}%.
+  🔻 Sell Amount set to ${value}%.
 `;
 
 const replyOrderMsg = () => `
-  Respond with the desired order for Take Profit / Stop Loss.
+  ↪️ Respond with the desired order for Take Profit / Stop Loss.
 
   Example:
 
@@ -158,19 +158,19 @@ const replyOrderMsg = () => `
 `;
 
 const orderMsg = () => `
-  New Order added.
+  🆕 New Order added.
 `;
 
 const gasFeeMsg = (value) => `
-  Gas fee set to ${value} SOL.
+  ⛽ Gas fee set to ${value} SOL.
 `;
 
 const invalidNumberMsg = () => `
-  Invalid number entered. Please try again. Example: 0.5
+  ❌🔢 Invalid number entered. Please try again. Example: 0.5
 `;
 
 const numberLimitMsg = () => `
-  Number can not be under 0 or over 100. Please try again. Example: 50
+  ❌🔢 Number can not be under 0 or over 100. Please try again. Example: 50
 `;
 
 module.exports = {

@@ -1,9 +1,9 @@
 const { trim, roundPrice, convertToShort, formatNumber } = require('@/utils');
 
 const buyTokenMsg = () => `
-  Buy Token:
+  🛒🆔 Buy Token:
 
-  <b>  </b>To buy a token enter a token address or name.
+  <b>To buy a token enter a token address or name.</b>
 `;
 
 const tokenMsg = ({
@@ -18,22 +18,22 @@ const tokenMsg = ({
   walletBalance,
 }) => {
   return `
-    📌 ${name} | <b>${symbol}</b>
+    📌 <b>${name}</b> | <b>${symbol}</b>
     
     🪅 CA: <code>${mint}</code>
 
-    💰 Token Price: <b>$${roundPrice(priceUsd)}</b>
+    💵 Token Price: <b>$${roundPrice(priceUsd)}</b>
     💥 5m: <b>${formatNumber(priceChange.m5)}%</b>, 1h: <b>${formatNumber(
     priceChange.h1
   )}%</b>, 6h: <b>${formatNumber(priceChange.h6)}%</b> 24h: <b>${formatNumber(
     priceChange.h24
   )}%</b>
-    💡 Market Cap: <b>$${convertToShort(mcap)}</b>
+    🔼 Market Cap: <b>$${convertToShort(mcap)}</b>
     💧 Liquidity: <b>$${convertToShort(liquidity)}</b>
-    ⛽ Pooled SOL: <b>${pooledSol.toFixed(2)} SOL</b>
+    💰 Pooled SOL: <b>${pooledSol.toFixed(2)} SOL</b>
 
     💳 Wallet Balance: <b>${walletBalance.toFixed(4)} SOL</b>
-    To buy press one of the buttons below.
+    👇 To buy press one of the buttons below.
   `;
 };
 
@@ -44,21 +44,21 @@ const copyWalletMsg = () => `Input a wallet address to copy trade and amount in 
 const noRouteMsg = ({ tokenName, tokenSymbol, mintAddress, walletBalance }) => `
   ${tokenName} | <b>${tokenSymbol}</b> | <code>${mintAddress}</code>
 
-  5m: <b>NaN%</b>, 1h: <b>NaN%</b>, 6h: <b>NaN%</b>, 24h: <b>NaN%</b>
-  Market Cap: <b>$N/A</b>
+  💥 5m: <b>NaN%</b>, 1h: <b>NaN%</b>, 6h: <b>NaN%</b>, 24h: <b>NaN%</b>
+  🔼 Market Cap: <b>$N/A</b>
 
-  WARNING: No route found. Strikebot instant swap is currently only available for -SOL pairs on Raydium AMM v4 and Orca CLMM. Please try again later.
+  🚨 <i>WARNING: No route found. Tonk Sniper bot instant swap is currently only available for -SOL pairs on Raydium AMM v4 and Orca CLMM. Please try again later.</i>
 
-  Wallet Balance: <b>${walletBalance} SOL</b>
-  To buy press one of the buttons below.
+  💳 Wallet Balance: <b>${walletBalance} SOL</b>
+  👇 To buy press one of the buttons below.
 `;
 
 const tokenNotFoundMsg = (token) => `
-  Token not found. Make sure address (${token}) is correct. You can enter a token address.
+  ❌ Token not found. Make sure address (${token}) is correct. You can enter a token address.
 `;
 
 const tokenNotFoundInWalletMsg = (token) => `
-  Token not found in your wallet. Make sure address (${token}) is correct. Check your wallet for the token (press /start).
+  ❌ Token not found in your wallet. Make sure address (${token}) is correct. Check your wallet for the token (press /start).
 `;
 
 const autoBuyFailedMsg = ({ amount, walletBalance }) => `

@@ -9,14 +9,14 @@ const positionKeyboard = ({
   ],
   [
     {
-      text: `🚀 Buy ${settings.leftBuyAmount} SOL`,
+      text: `💲 Buy ${settings.leftBuyAmount} SOL`,
       callback_data: `buyAmount ${mint} ${settings.leftBuyAmount}`,
     },
     {
-      text: `🚀 Buy ${settings.rightBuyAmount} SOL`,
+      text: `💲 Buy ${settings.rightBuyAmount} SOL`,
       callback_data: `buyAmount ${mint} ${settings.rightBuyAmount}`,
     },
-    { text: '🚀 Buy X SOL', callback_data: `buyX ${mint}` },
+    { text: '💲 Buy X SOL', callback_data: `buyX ${mint}` },
   ],
   [
     { text: '◀️ Prev', callback_data: `refreshManagePositions ${index - 1}` },
@@ -25,22 +25,22 @@ const positionKeyboard = ({
   ],
   [
     {
-      text: `🎯 Sell ${settings.leftSellAmount}%`,
+      text: `🔻 Sell ${settings.leftSellAmount}%`,
       callback_data: `sellPercent ${ata} ${settings.leftSellAmount}`,
     },
     {
-      text: `🎯 Sell ${settings.rightSellAmount}%`,
+      text: `🔻 Sell ${settings.rightSellAmount}%`,
       callback_data: `sellPercent ${ata} ${settings.rightSellAmount}`,
     },
-    { text: '🎯 Sell X %', callback_data: `sellX ${ata}` },
+    { text: '🔻 Sell X %', callback_data: `sellX ${ata}` },
   ],
   [
-    { text: '📈 Explorer', url: `https://solscan.io/account/${mint}` },
+    { text: '🌐 Explorer', url: `https://solscan.io/account/${mint}` },
     {
-      text: '📈 Birdeye',
+      text: '🐦 Birdeye',
       url: `https://birdeye.so/token/${mint}?chain=solana`,
     },
-    { text: '📈 Scan', url: `https://t.me/ttfbotbot?start=sol-${mint}` },
+    { text: '🔎 Scan', url: `https://t.me/ttfbotbot?start=sol-${mint}` },
     {
       text: '📈 Chart',
       url: `https://t.me/ttfbotbot?start=solc-${mint}`,
