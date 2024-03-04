@@ -26,13 +26,23 @@ const createSettings = async (id) => {
 };
 
 const updateSettings = async (id, params) => {
+  if (params.autoSell !== undefined) {
+    params.autoSell = !!params.autoSell;
+  }
+
+  if (params.autoBuy !== undefined) {
+    params.autoBuy = !!params.autoBuy;
+  }
+
   await prisma.settings.update({
     where: {
       id: id.toString(),
     },
     data: params,
   });
+
   const settings = await findSettings(id);
+
   return settings;
 };
 

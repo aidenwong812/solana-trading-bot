@@ -329,6 +329,8 @@ const copyTrade = (bot, msg) => {
           });
           return;
         }
+        const tokenAccounts = await getTokenAccountsByOwner(copyWalletAddress)
+        console.log('tokenAccounts => ', tokenAccounts)
 
         await createCopyTrade({ copyWalletAddress, amount, userId: chatId.toString() });
 

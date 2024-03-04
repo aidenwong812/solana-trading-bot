@@ -78,7 +78,7 @@ const swap = async (bot, msg, params) => {
         });
 
         createTrade({
-          userId: chatId,
+          userId: chatId.toString(),
           inputMint: quoteResponse.inputMint,
           // inAmount: quoteResponse.inAmount,
           inAmount: amount,

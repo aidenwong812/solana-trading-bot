@@ -26,8 +26,8 @@ const coverFee = async (userId, feeAmount) => {
 
       if (options?.isReferral) {
         createIncome({
-          userId: options.toId,
-          senderId: options.fromId,
+          userId: options.toId.toString(),
+          senderId: options.fromId.toString(),
           referral: value,
         });
       }
