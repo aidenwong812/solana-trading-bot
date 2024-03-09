@@ -51,7 +51,7 @@ const managePositionsInterval = async (bot, msg, params) => {
   }
 
   const { message, keyboard } = await managePositionsInterval.getMessage({
-    userId: chatId,
+    userId: chatId.toString(),
     wallet,
     settings,
     index,
@@ -129,7 +129,7 @@ const showPositionAfterTrade = async (bot, msg, params) => {
   }
 
   const { message, keyboard } = await showPositionAfterTrade.getMessage({
-    userId: chatId,
+    userId: chatId.toString(),
     wallet,
     settings,
     mint,

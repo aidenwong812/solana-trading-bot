@@ -19,11 +19,12 @@ const executeTransaction = async (transaction) => {
   return txid;
 };
 
-const initiateSwap = async ({ inputMint, outputMint, amount, payer }) => {
+const initiateSwap = async ({ inputMint, outputMint, amount, payer, slippageBps }) => {
   const quoteResponse = await getQuote({
     inputMint,
     outputMint,
     amount,
+    slippageBps,
   });
 
   if (quoteResponse.error) {

@@ -44,11 +44,11 @@ const getPrice = async (mintAddress) => {
     });
 };
 
-const getQuote = async ({ inputMint, outputMint, amount }) => {
+const getQuote = async ({ inputMint, outputMint, amount, slippageBps }) => {
   // const url = `https://quote-api.jup.ag/v6/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&excludeDexes=${excludeDexes.join(
   //   ','
   // )}`;
-  const url = `https://quote-api.jup.ag/v6/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}`;
+  const url = `https://quote-api.jup.ag/v6/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${amount}&slippageBps=${slippageBps}`;
 
   return fetch(url).then(async (res) => {
     const data = await res.json();

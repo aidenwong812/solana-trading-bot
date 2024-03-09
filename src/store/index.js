@@ -30,13 +30,13 @@ const store = {
   },
 
   getReferrer: function (id) {
-    return this.referrers[id] || null;
+    return this.referrers[id.toString()] || null;
   },
 
   setReferrer: function (user) {
     const { id, referrerId } = user;
     if (referrerId) {
-      this.referrers[referrerId] = id;
+      this.referrers[referrerId.toString()] = id;
     }
   },
 

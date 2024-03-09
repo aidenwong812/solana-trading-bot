@@ -259,7 +259,7 @@ const addStrategy = async (bot, msg) => {
           return;
         }
 
-        await createStrategy({ userId: chatId, percent, amount });
+        await createStrategy({ userId: chatId.toString(), percent, amount });
         const settings = await findSettings(chatId);
 
         bot.editMessageText(settingsMsg(settings), {
