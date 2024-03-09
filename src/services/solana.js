@@ -35,6 +35,13 @@ const getTokenAccountsByOwner = async (owner) => {
   return res.value;
 };
 
+const getConfirmation = async (txid) => {
+  const result = await connection.getSignatureStatus(txid, {
+    searchTransactionHistory: true,
+  });
+  return result.value?.confirmationStatus;
+};
+
 const getATASync = async (mint, owner) => {
   const ata = await getAssociatedTokenAddressSync(
     new PublicKey(mint),
@@ -57,6 +64,7 @@ module.exports = {
   getParsedAccountInfo,
   getTokenSupply,
   getTokenAccountsByOwner,
+  getConfirmation,
   getATASync,
   confirmTransaction,
 };

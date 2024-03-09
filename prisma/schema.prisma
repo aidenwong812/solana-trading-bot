@@ -27,6 +27,7 @@ model Income {
 model User {
   id         String  @id
   referrerId String?
+  username   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

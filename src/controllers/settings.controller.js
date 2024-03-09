@@ -41,7 +41,7 @@ const updateSettings = async (id, params) => {
     data: params,
   });
 
-  const settings = await findSettings(id);
+  const settings = await findSettings(id.toString());
 
   return settings;
 };

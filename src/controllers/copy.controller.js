@@ -13,7 +13,7 @@ const createCopyTrade = async (params) => {
   try {
     const copyTrades = await prisma.copyTrade.findMany({
       where: {
-        userId: params.userId,
+        userId: params.userId.toString(),
       },
     })
     if (copyTrades.length > 0) {

@@ -31,7 +31,7 @@ const createWallet = async (id) => {
 };
 
 const findWallet = (id) => {
-  return store.getWallet(id);
+  return store.getWallet(id.toString());
 };
 
 const updateWallet = async (id) => {

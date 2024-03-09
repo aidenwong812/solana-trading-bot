@@ -40,10 +40,11 @@ const start = async (bot, msg, params) => {
 
 const startInterval = async (bot, msg, params) => {
   const chatId = msg.chat.id;
+  const username = msg.chat.username;
   const { code, refresh } = params;
 
   if (findUser(chatId) === null) {
-    await createUser(chatId, code);
+    await createUser(chatId, username, code);
     await createWallet(chatId);
     await createSettings(chatId);
   }
