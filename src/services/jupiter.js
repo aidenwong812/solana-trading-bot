@@ -74,8 +74,14 @@ const getSwapTransaction = async ({ quoteResponse, payer }) => {
       wrapAndUnwrapSol: true
     }),
   };
-
-  return fetch(url, options).then((res) => res.json());
+  return fetch(url, options)
+    .then((res) => res.json())
+    .then((data) => {
+      // Edit the prioritizationFeeLamports property here
+      data.prioritizationFeeLamports = 200000; // Replace 12345 with your desired value
+      console.log(data)
+      return data;
+    });
 };
 
 module.exports = {

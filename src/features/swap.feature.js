@@ -10,11 +10,13 @@ const signTransaction = (swapTransaction, payer) => {
 };
 
 const executeTransaction = async (transaction) => {
-  const rawTransaction = transaction.serialize();
-  const txid = await connection.sendRawTransaction(rawTransaction, {
+  const rawTransaction = await transaction.serialize();
+  const options = {
     skipPreflight: true,
-    maxRetries: 2,
-  });
+    commitment: 'confirmed', // Adjust as needed
+    preflightCommitment: 'processed',
+  };
+  const txid = await connection.sendRawTransaction( rawTransaction, options);
 
   return txid;
 };
