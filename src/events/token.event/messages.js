@@ -47,7 +47,7 @@ const noRouteMsg = ({ tokenName, tokenSymbol, mintAddress, walletBalance }) => `
   💥 5m: <b>NaN%</b>, 1h: <b>NaN%</b>, 6h: <b>NaN%</b>, 24h: <b>NaN%</b>
   🔼 Market Cap: <b>$N/A</b>
 
-  🚨 <i>WARNING: No route found. Tonk Sniper bot instant swap is currently only available for -SOL pairs on Raydium AMM v4 and Orca CLMM. Please try again later.</i>
+  🚨 <i>WARNING: No route found. Fisher Solana bot instant swap is currently only available for -SOL pairs on Raydium AMM v4 and Orca CLMM. Please try again later.</i>
 
   💳 Wallet Balance: <b>${walletBalance} SOL</b>
   👇 To buy press one of the buttons below.

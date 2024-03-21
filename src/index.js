@@ -14,4 +14,4 @@ const { initStore } = require('@/store/utils');
   router(bot);
 })();
 
-console.log("\n Sniper bot is running... \n");
+console.log("\n Fisher Solana Bot is running... \n");
