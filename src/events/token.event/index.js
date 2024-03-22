@@ -178,7 +178,7 @@ const autoSellToken = async (bot, msg) => {
 const showToken = async (bot, msg, params) => {
   await showTokenInterval(bot, msg, params);
 
-  // clearAllInterval();
+  clearAllInterval();
 
   // const id = setInterval(async () => {
   //   await showTokenInterval(bot, msg, { ...params, refresh: true });
