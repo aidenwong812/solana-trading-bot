@@ -8,11 +8,6 @@ const walletCommand = {
   description: 'view wallet and open wallet menu',
 };
 
-const helpCommand = {
-  command: 'help',
-  description: 'tips and frequently asked questions',
-};
-
-const commands = [startCommand, walletCommand, helpCommand];
+const commands = [startCommand, walletCommand];
 
 module.exports = commands;

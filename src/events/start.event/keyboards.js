@@ -10,7 +10,6 @@ const startKeyboard = () => [
     { text: '🛠️ Settings', callback_data: 'showSettings' },
   ],
   [
-    { text: '🧢 Refer Friends', callback_data: 'showReferrals' },
     { text: '🔄 Refresh', callback_data: 'refreshStart' },
   ],
 ];
